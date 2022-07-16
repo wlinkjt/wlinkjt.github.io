@@ -459,7 +459,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    411
+                    951
                 </div>
                 
 
@@ -488,7 +488,13 @@
 <h2 id="1-1-红外发射电路"><a href="#1-1-红外发射电路" class="headerlink" title="1.1 红外发射电路"></a>1.1 红外发射电路</h2><p> 红外通信的距离以及抗干扰强度与其功率有关，因此为保证红外通信距离一般采用mos管作为功率开关，对其进行功率放大。设计电路如图1<br> <img src="D:\Myblog\hexoblog\source_posts\picture\1.jpg" alt="图1 红外发射电路"><br> 该电路采用mos管通过对电流进行放大增加红外功率，笔者也对三极管通过电压放大增加功率的方式进行过实验，其效果不如电流放大的形式。在电路外围并联电容存储能量，防止在进行红外通信时因为频率过快，电能供应不及时而导致通信效果不佳。</p>
 <h2 id="1-2-红外接收电路"><a href="#1-2-红外接收电路" class="headerlink" title="1.2 红外接收电路"></a>1.2 红外接收电路</h2><p> 红外接收电路对红外信号进行接收、放大、检波、整形并最后解调出二进制脉冲，从而完成红外通信。因笔者对接收电路原理了解不多，直接采购淘宝的接收模块，因此对接收电路不做评述。</p>
 <h1 id="2-R05d协议介绍"><a href="#2-R05d协议介绍" class="headerlink" title="2 R05d协议介绍"></a>2 R05d协议介绍</h1><p>  R05d协议为美的空调红外通信协议，其编码与时序与NEC不同，下面以编码和时序两部分对其进行详细介绍。</p>
-<h2 id="2-1-R05d协议编码"><a href="#2-1-R05d协议编码" class="headerlink" title="2.1 R05d协议编码"></a>2.1 R05d协议编码</h2><h2 id="2-2-R05d协议时序"><a href="#2-2-R05d协议时序" class="headerlink" title="2.2 R05d协议时序"></a>2.2 R05d协议时序</h2><h1 id="3-程序代码"><a href="#3-程序代码" class="headerlink" title="3 程序代码"></a>3 程序代码</h1>
+<h2 id="2-1-R05d协议编码"><a href="#2-1-R05d协议编码" class="headerlink" title="2.1 R05d协议编码"></a>2.1 R05d协议编码</h2><p>  R05d通常编码形式为LAA’BB’CC’SLAA’BB’CC’(部分协议尾部还会加一个结束码)。<br>  L为引导码；S为分隔码，用于区分第一帧与第二帧；<br>  A为识别码，一般采用A=0xB2，预留A=0xB7，A’为A的反码；B用于控制空调风速，B’为B的反码；C用于控制温度以及模式，C’为C的反码。<br>  下面是B各值代表的含义<br>  <img src="" alt="图2 B-参数表"><br>  下面是C各值代表的含义<br>  <img src="" alt="图3 C-参数表"><br>  ==注意：各编码都为高位先发==</p>
+<h2 id="2-2-R05d协议时序"><a href="#2-2-R05d协议时序" class="headerlink" title="2.2 R05d协议时序"></a>2.2 R05d协议时序</h2><p>  下面主要对引导码，分隔码，“0”数据，“1”数据以及终止符进行时序讲解。<br>  <strong>发送引导码</strong><br>  <img src="" alt="图4 引导码时序"><br>  <strong>发送分隔码</strong><br>  <img src="" alt="图5 分隔码时序"><br>  <strong>发送“0”数据</strong><br>  <img src="" alt="图6 “0”数据时序"><br>  <strong>发送“1”数据</strong><br>  <img src="" alt="图7 “1”数据时序"><br>  <strong>发送终止符</strong><br>  <img src="" alt="图8 终止符时序"><br>==各时序时间不要求完全相等，可以存在一定的误差==</p>
+<h1 id="3-程序代码"><a href="#3-程序代码" class="headerlink" title="3 程序代码"></a>3 程序代码</h1><p>  本程序采用stm32进行编写，以通用IO进行控制，对于定时器资源不足的情况具有较好的适应性。<br>`//红外通信 R05D电控协议<br>void IR_Init()<br>{<br>   GPIO_InitTypeDef  GPIO_InitStructure;<br>   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);<br>   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;                  //PC11<br>   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;           //推挽输出<br>   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;          //IO速度为50MHz<br>   GPIO_Init(GPIOC, &amp;GPIO_InitStructure);                      //初始化GPIOA.15<br>   GPIO_ResetBits(GPIOC,GPIO_Pin_11);</p>
+<p>}<br>//38KHz 发送载波 高电平 1/38KHz=26.3us 高点26.3/3=8.77us 低电17.53us<br>//a—–发送载波周期数<br>//发射0—–a=21  0.54ms/26.14us=20.658<br>//发射1—–a=62  1.62ms/26.14us=61.974<br>//发射S—–a=200 5.22ms/26.14us=199.693   //201<br>//发射L—–a=168 4.4ms/26.14us=168.324    //169<br>void Send_IR(u32 a)<br>{<br>    while(a–)<br>    {<br>        IR=1;<br>//        delay_min(632);//8.72us<br>        delay_us(8);</p>
+<p>//        delay_us(13);<br>        IR=0;<br>//        delay_min(1263);//17.42us<br>        delay_us(17);<br>//        delay_us(13);<br>    }<br>}<br>//38KHz 不发送载波 低电平<br>//发射0—–a=21  0.54ms/26.15us=20.65<br>//发射1—–a=21  0.54ms/26.15us=20.65<br>//发射S—–a=21  0.54ms/26.15us=20.65<br>//发射L—–a=168 4.4ms/26.15us=168.26   //169<br>void No_Send_IR(u32 a)<br>{<br>   while(a–)<br>     {<br>       IR=0;<br>//         delay_us(1895);//26.15us<br>         delay_us(26);<br>     }</p>
+<p>}<br>//发射1<br>void Send_h()<br>{<br>//   Send_IR(62);<br>//     No_Send_IR(21);<br>     Send_IR(21);<br>     No_Send_IR(61);<br>}<br>//发射0<br>void Send_l()<br>{<br>   Send_IR(21);<br>     No_Send_IR(20);<br>}<br>//发射L 引导码<br>void Send_L()<br>{<br>//   Send_IR(168);<br>//     No_Send_IR(168);<br>     Send_IR(168);<br>     No_Send_IR(168);<br>}<br>//发射S 分隔码<br>void Send_S()<br>{<br>//   Send_IR(200);<br>//     Send_IR(201);<br>//     No_Send_IR(21);<br>   Send_IR(21);<br>     No_Send_IR(201);<br>}<br>//发射终止符<br>void Send_End()<br>{<br>   Send_IR(21);//0.54ms低(接收端)  高(发送端)<br>}`</p>
+<h1 id="4-实验分析"><a href="#4-实验分析" class="headerlink" title="4 实验分析"></a>4 实验分析</h1>
                 
             </div>
             <hr/>
@@ -1005,7 +1011,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">484</span>
+                        class="white-color">1k</span>
             
             
             
