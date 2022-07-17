@@ -4,6 +4,82 @@
   
     
     <entry>
+      <title>freeRTOS基础（一）</title>
+      <link href="/2022/07/16/freertos-ji-chu-yi/"/>
+      <url>/2022/07/16/freertos-ji-chu-yi/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> freeRTOS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ZYNQ嵌入式开发（一）</title>
+      <link href="/2022/07/16/zynq-qian-ru-shi-kai-fa-yi/"/>
+      <url>/2022/07/16/zynq-qian-ru-shi-kai-fa-yi/</url>
+      
+        <content type="html"><![CDATA[<p>本篇主要对如何进行zynq嵌入式开发的流程进行介绍。开发环境为vivado 2018.3</p><h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><p>zynq嵌入式开发流程如下图1，主要分为6步。对于初学者来说，首先需要掌握硬件环境搭建，也就是前4步。<br><img src="https://s1.ax1x.com/2022/07/17/j579Ag.png" alt="图1 zynq嵌入式开发流程"><br>下面以创建读写SD卡并通过串口发送消息为例进行流程讲解。</p><h1 id="硬件环境搭建"><a href="#硬件环境搭建" class="headerlink" title="硬件环境搭建"></a>硬件环境搭建</h1><p>首先打开vivado界面，选择create project，在创建好工程名后一路点击next，选择好自己芯片型号后，最后得到图2所示的界面。<br><img src="https://s1.ax1x.com/2022/07/16/j56SJS.md.png" alt="图2 工程创建完成"><br>在工程界面，选择左边IP INTEGRATOR下的create block design。再点击diagram下的“+”，在弹出的选择框中，输入zynq，如图3所示，双击该选项，得到如图4所示的，最初始的PS。<br><img src="https://s1.ax1x.com/2022/07/16/j5yzi8.md.png" alt="图3 选择PS"><br><img src="https://s1.ax1x.com/2022/07/16/j56pRg.md.png" alt="图4 初始化PS"><br>由于本例程只使用了SD卡的读写以及UART，并没有涉及到其他接口，因此需要对该PS进行设置。<br>DDR3的设置，选择适配自己的DDR型号<br><img src="https://s1.ax1x.com/2022/07/16/j56FLn.md.png" alt="图5 DDR3设置"><br>时钟的设置<br><img src="https://s1.ax1x.com/2022/07/16/j56iss.md.png" alt="图6 时钟设置"><br>IO选择，由于例程只用到SD以及UART，因此只勾选SD和UART的引脚，注意BANK1为1.8V<br><img src="https://s1.ax1x.com/2022/07/16/j56AZq.md.png" alt="图7 IO的选择"><br>串口的设置<br><img src="https://s1.ax1x.com/2022/07/16/j56Ed0.md.png" alt="图8 串口设置"><br>复位去除<br><img src="https://s1.ax1x.com/2022/07/16/j56VoV.md.png" alt="图9 复位去除"><br>设置完成后点击run block automation，创建自己的IP核，最后如10所示.<br><img src="https://s1.ax1x.com/2022/07/16/j56eiT.md.png" alt="图10 设置完成后的IP核"><br>之后右击工程，选择generate output products,如图11所示。<br><img src="https://s1.ax1x.com/2022/07/16/j56mJU.png" alt="图11 生成输出文件"><br>之后右击工程，生成HDL wrapper后，选择file-&gt;export hardware，该处不点击生成比特流文件，因为并没有用到PL的部分。<br>在完成以上操作后，硬件环境搭建完成，进入SDK进行编写。</p><h1 id="SDK库文件添加"><a href="#SDK库文件添加" class="headerlink" title="SDK库文件添加"></a>SDK库文件添加</h1><p>此处操作主要添加板载支持文件——FAT32文件系统.<br>在打开的SDK页面，选择file—&gt;new—&gt;application project.填好工程名后，选择空工程。<br>之后右击选择board support package settings,如图12.<br><img src="https://s1.ax1x.com/2022/07/16/j56nWF.md.png" alt="图12 板载支持包设置"><br>勾选xilffs文件即完成FAT32系统支持包的添加。</p><h1 id="程序编写"><a href="#程序编写" class="headerlink" title="程序编写"></a>程序编写</h1><p>本例程完成SD卡的读写以及通过串口打印是否读写正确。程序代码如下：</p><pre class="line-numbers language-none"><code class="language-none">#include "xil_printf.h"#include "ff.h"#include "xparameters.h"#define file_name "example.txt"char str_wr[50]="1315";//将wr_data[]中数据写入wr_len个void sd_write_data(char wr_data[],u32 wr_len){FIL file;UINT bw;f_open(&amp;file,file_name,FA_CREATE_ALWAYS|FA_WRITE|FA_READ);//打开（创建）文件f_lseek(&amp;file,0);//移动读写指针f_write(&amp;file,wr_data,wr_len,&amp;bw);//写数据f_close(&amp;file);//关闭文件}//读出rd_len个数据到rd_data中void sd_read_data(char rd_data[],u32 rd_len){FIL file;UINT br;f_open(&amp;file,file_name,FA_READ);//打开文件f_lseek(&amp;file,0);//移动读写指针f_read(&amp;file,rd_data,rd_len,&amp;br);//写数据f_close(&amp;file);//关闭文件}//将SD卡格式化void sd_mount(){    FRESULT state;FATFS fs;    BYTE work[FF_MAX_SS];    state=f_mount(&amp;fs,"",1);    if(state!=FR_OK)    {    xil_printf("not fat32");    //格式化SD卡    f_mkfs("",FM_FAT32,0,work,sizeof work);    state=f_mount(&amp;fs,"",1);    }}int main(){FATFS fs;u32 len=0;char str_rd[50]="";f_mount(&amp;fs,"",1);//进行挂载len=strlen(str_wr);sd_write_data(str_wr,len);//写入数据    sd_read_data(str_rd,len);//读取数据    if(strcmp(str_wr,str_rd)==0) xil_printf("succeed!!\r\n");    else xil_printf("fail!!!\r\n");    return 0;}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> ZYNQ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>嵌入式基础通信之SPI</title>
+      <link href="/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-spi/"/>
+      <url>/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-spi/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 嵌入式通信 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>嵌入式基础通信之IIC</title>
+      <link href="/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/"/>
+      <url>/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 嵌入式通信 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>嵌入式基础通信之红外通信-R05d协议</title>
       <link href="/2022/03/15/qian-ru-shi-ji-chu-tong-xin-zhi-hong-wai-tong-xin/"/>
       <url>/2022/03/15/qian-ru-shi-ji-chu-tong-xin-zhi-hong-wai-tong-xin/</url>

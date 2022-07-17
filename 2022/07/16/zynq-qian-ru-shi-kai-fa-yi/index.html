@@ -4,9 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="嵌入式基础通信之红外通信-R05d协议, 无兴之的博客">
-    <meta name="description" content="1 硬件基础 红外通信一般包含红外发射电路以及红外接收电路两部分。红外发射电路主要将二进制信号通过脉宽调制的方式以红外光的形式发射出去；红外接收电路对接收到的红外信号进行解调从而实现红外通信。
-1.1 红外发射电路 红外通信的距离以及抗干扰">
+    <meta name="keywords" content="ZYNQ嵌入式开发（一）, 无兴之的博客">
+    <meta name="description" content="本篇主要对如何进行zynq嵌入式开发的流程进行介绍。开发环境为vivado 2018.3
+整体流程zynq嵌入式开发流程如下图1，主要分为6步。对于初学者来说，首先需要掌握硬件环境搭建，也就是前4步。下面以创建读写SD卡并通过串口发送消息为">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +18,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>嵌入式基础通信之红外通信-R05d协议 | 无兴之的博客</title>
+    <title>ZYNQ嵌入式开发（一） | 无兴之的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -313,12 +313,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">嵌入式基础通信之红外通信-R05d协议</h1>
+                    <h1 class="description center-align post-title">ZYNQ嵌入式开发（一）</h1>
                 </div>
             </div>
         </div>
@@ -434,8 +434,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
-                                <span class="chip bg-color">嵌入式通信</span>
+                            <a href="/tags/ZYNQ/">
+                                <span class="chip bg-color">ZYNQ</span>
                             </a>
                         
                     </div>
@@ -450,7 +450,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-03-15
+                    2022-07-16
                 </div>
                 
 
@@ -459,7 +459,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    738
                 </div>
                 
 
@@ -484,216 +484,70 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-硬件基础"><a href="#1-硬件基础" class="headerlink" title="1 硬件基础"></a>1 硬件基础</h1><p> 红外通信一般包含红外发射电路以及红外接收电路两部分。红外发射电路主要将二进制信号通过脉宽调制的方式以红外光的形式发射出去；红外接收电路对接收到的红外信号进行解调从而实现红外通信。</p>
-<h2 id="1-1-红外发射电路"><a href="#1-1-红外发射电路" class="headerlink" title="1.1 红外发射电路"></a>1.1 红外发射电路</h2><p> 红外通信的距离以及抗干扰强度与其功率有关，因此为保证红外通信距离一般采用mos管作为功率开关，对其进行功率放大。设计电路如图1<br> <img src="https://s1.ax1x.com/2022/07/16/j5Vv4J.jpg" alt="图1 红外发射电路"><br> 该电路采用mos管通过对电流进行放大增加红外功率，笔者也对三极管通过电压放大增加功率的方式进行过实验，其效果不如电流放大的形式。在电路外围并联电容存储能量，防止在进行红外通信时因为频率过快，电能供应不及时而导致通信效果不佳。</p>
-<h2 id="1-2-红外接收电路"><a href="#1-2-红外接收电路" class="headerlink" title="1.2 红外接收电路"></a>1.2 红外接收电路</h2><p> 红外接收电路对红外信号进行接收、放大、检波、整形并最后解调出二进制脉冲，从而完成红外通信。因笔者对接收电路原理了解不多，直接采购淘宝的接收模块，因此对接收电路不做评述。</p>
-<h1 id="2-R05d协议介绍"><a href="#2-R05d协议介绍" class="headerlink" title="2 R05d协议介绍"></a>2 R05d协议介绍</h1><p>  R05d协议为美的空调红外通信协议，其编码与时序与NEC不同，下面以编码和时序两部分对其进行详细介绍。</p>
-<h2 id="2-1-R05d协议编码"><a href="#2-1-R05d协议编码" class="headerlink" title="2.1 R05d协议编码"></a>2.1 R05d协议编码</h2><p>  R05d通常编码形式为LAA’BB’CC’SLAA’BB’CC’(部分协议尾部还会加一个结束码)。<br>  L为引导码；S为分隔码，用于区分第一帧与第二帧；<br>  A为识别码，一般采用A=0xB2，预留A=0xB7，A’为A的反码；B用于控制空调风速，B’为B的反码；C用于控制温度以及模式，C’为C的反码。<br>  下面是B各值代表的含义<br>  <img src="https://s1.ax1x.com/2022/07/16/j5ZS3R.png" alt="图2 B-参数表"><br>  下面是C各值代表的含义<br>  <img src="https://s1.ax1x.com/2022/07/16/j5Zpg1.png" alt="图3 C-参数表"><br>  ==注意：各编码都为高位先发==</p>
-<h2 id="2-2-R05d协议时序"><a href="#2-2-R05d协议时序" class="headerlink" title="2.2 R05d协议时序"></a>2.2 R05d协议时序</h2><p>  下面主要对引导码，分隔码，“0”数据，“1”数据以及终止符进行时序讲解。<br>  <strong>发送引导码</strong><br>  <img src="https://s1.ax1x.com/2022/07/16/j5VLHU.png" alt="图4 引导码时序"><br>  <strong>发送分隔码</strong><br>  <img src="https://s1.ax1x.com/2022/07/16/j5VXEF.png" alt="图5 分隔码时序"><br>  <strong>发送“0”数据</strong><br>  <img src="https://s1.ax1x.com/2022/07/16/j5VqBT.png" alt="图6 “0”数据时序"><br>  <strong>发送“1”数据</strong><br>  <img src="https://s1.ax1x.com/2022/07/16/j5VjN4.png" alt="图7 “1”数据时序"><br>  <strong>发送终止符</strong><br>  <img src="https://s1.ax1x.com/2022/07/16/j5VzC9.png" alt="图8 终止符时序"><br>==各时序时间不要求完全相等，可以存在一定的误差==</p>
-<h1 id="3-程序代码"><a href="#3-程序代码" class="headerlink" title="3 程序代码"></a>3 程序代码</h1><p>  本程序采用stm32进行编写，以通用IO进行控制，对于定时器资源不足的情况具有较好的适应性。</p>
-<pre class="line-numbers language-none"><code class="language-none">//红外通信 R05D电控协议
-void IR_Init()
+                <p>本篇主要对如何进行zynq嵌入式开发的流程进行介绍。开发环境为vivado 2018.3</p>
+<h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><p>zynq嵌入式开发流程如下图1，主要分为6步。对于初学者来说，首先需要掌握硬件环境搭建，也就是前4步。<br><img src="https://s1.ax1x.com/2022/07/17/j579Ag.png" alt="图1 zynq嵌入式开发流程"><br>下面以创建读写SD卡并通过串口发送消息为例进行流程讲解。</p>
+<h1 id="硬件环境搭建"><a href="#硬件环境搭建" class="headerlink" title="硬件环境搭建"></a>硬件环境搭建</h1><p>首先打开vivado界面，选择create project，在创建好工程名后一路点击next，选择好自己芯片型号后，最后得到图2所示的界面。<br><img src="https://s1.ax1x.com/2022/07/16/j56SJS.md.png" alt="图2 工程创建完成"><br>在工程界面，选择左边IP INTEGRATOR下的create block design。再点击diagram下的“+”，在弹出的选择框中，输入zynq，如图3所示，双击该选项，得到如图4所示的，最初始的PS。<br><img src="https://s1.ax1x.com/2022/07/16/j5yzi8.md.png" alt="图3 选择PS"><br><img src="https://s1.ax1x.com/2022/07/16/j56pRg.md.png" alt="图4 初始化PS"><br>由于本例程只使用了SD卡的读写以及UART，并没有涉及到其他接口，因此需要对该PS进行设置。<br>DDR3的设置，选择适配自己的DDR型号<br><img src="https://s1.ax1x.com/2022/07/16/j56FLn.md.png" alt="图5 DDR3设置"><br>时钟的设置<br><img src="https://s1.ax1x.com/2022/07/16/j56iss.md.png" alt="图6 时钟设置"><br>IO选择，由于例程只用到SD以及UART，因此只勾选SD和UART的引脚，注意BANK1为1.8V<br><img src="https://s1.ax1x.com/2022/07/16/j56AZq.md.png" alt="图7 IO的选择"><br>串口的设置<br><img src="https://s1.ax1x.com/2022/07/16/j56Ed0.md.png" alt="图8 串口设置"><br>复位去除<br><img src="https://s1.ax1x.com/2022/07/16/j56VoV.md.png" alt="图9 复位去除"><br>设置完成后点击run block automation，创建自己的IP核，最后如10所示.<br><img src="https://s1.ax1x.com/2022/07/16/j56eiT.md.png" alt="图10 设置完成后的IP核"><br>之后右击工程，选择generate output products,如图11所示。<br><img src="https://s1.ax1x.com/2022/07/16/j56mJU.png" alt="图11 生成输出文件"><br>之后右击工程，生成HDL wrapper后，选择file-&gt;export hardware，该处不点击生成比特流文件，因为并没有用到PL的部分。<br>在完成以上操作后，硬件环境搭建完成，进入SDK进行编写。</p>
+<h1 id="SDK库文件添加"><a href="#SDK库文件添加" class="headerlink" title="SDK库文件添加"></a>SDK库文件添加</h1><p>此处操作主要添加板载支持文件——FAT32文件系统.<br>在打开的SDK页面，选择file—&gt;new—&gt;application project.填好工程名后，选择空工程。<br>之后右击选择board support package settings,如图12.<br><img src="https://s1.ax1x.com/2022/07/16/j56nWF.md.png" alt="图12 板载支持包设置"><br>勾选xilffs文件即完成FAT32系统支持包的添加。</p>
+<h1 id="程序编写"><a href="#程序编写" class="headerlink" title="程序编写"></a>程序编写</h1><p>本例程完成SD卡的读写以及通过串口打印是否读写正确。程序代码如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">#include "xil_printf.h"
+#include "ff.h"
+#include "xparameters.h"
+
+#define file_name "example.txt"
+
+char str_wr[50]="1315";
+//将wr_data[]中数据写入wr_len个
+void sd_write_data(char wr_data[],u32 wr_len)
 {
-   GPIO_InitTypeDef  GPIO_InitStructure;	
-   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;				  //PC11
-   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		  //推挽输出
-   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		  //IO速度为50MHz
-   GPIO_Init(GPIOC, &amp;GPIO_InitStructure);					  //初始化GPIOA.15
-   GPIO_ResetBits(GPIOC,GPIO_Pin_11);
+	FIL file;
+	UINT bw;
+
+	f_open(&amp;file,file_name,FA_CREATE_ALWAYS|FA_WRITE|FA_READ);//打开（创建）文件
+	f_lseek(&amp;file,0);//移动读写指针
+	f_write(&amp;file,wr_data,wr_len,&amp;bw);//写数据
+	f_close(&amp;file);//关闭文件
 
 }
-
-//38KHz 发送载波 高电平 1/38KHz=26.3us 高点26.3/3=8.77us 低电17.53us
-//a-----发送载波周期数
-//发射0-----a=21  0.54ms/26.14us=20.658 
-//发射1-----a=62  1.62ms/26.14us=61.974
-//发射S-----a=200 5.22ms/26.14us=199.693   //201
-//发射L-----a=168 4.4ms/26.14us=168.324    //169
-void Send_IR(u32 a)
+//读出rd_len个数据到rd_data中
+void sd_read_data(char rd_data[],u32 rd_len)
 {
-	while(a--)
-	{
-  	  IR=1;
-	  delay_us(8);
-	  IR=0;
-	  delay_us(17);
-	}
-}
+	FIL file;
+	UINT br;
 
-//38KHz 不发送载波 低电平
-//发射0-----a=21  0.54ms/26.15us=20.65
-//发射1-----a=21  0.54ms/26.15us=20.65
-//发射S-----a=21  0.54ms/26.15us=20.65
-//发射L-----a=168 4.4ms/26.15us=168.26   //169
-void No_Send_IR(u32 a)
-{
-   while(a--)
-	 {
-	   IR=0;
-	   delay_us(26);
-	 }
+	f_open(&amp;file,file_name,FA_READ);//打开文件
+	f_lseek(&amp;file,0);//移动读写指针
+	f_read(&amp;file,rd_data,rd_len,&amp;br);//写数据
+	f_close(&amp;file);//关闭文件
 
 }
-
-//发射1
-void Send_h()
+//将SD卡格式化
+void sd_mount()
 {
-	 Send_IR(21);
-	 No_Send_IR(61);
+    FRESULT state;
+	FATFS fs;
+    BYTE work[FF_MAX_SS];
+    state=f_mount(&amp;fs,"",1);
+    if(state!=FR_OK)
+    {
+    	xil_printf("not fat32");
+    	//格式化SD卡
+    	f_mkfs("",FM_FAT32,0,work,sizeof work);
+    	state=f_mount(&amp;fs,"",1);
+    }
 }
-
-//发射0
-void Send_l()
+int main()
 {
-   Send_IR(21);
-   No_Send_IR(20);
-}
-
-//发射L 引导码
-void Send_L()
-{
-	 Send_IR(168);
-	 No_Send_IR(168);
-}
-
-//发射S 分隔码
-void Send_S()
-{
-   Send_IR(21);
-   No_Send_IR(201);
-}
-
-//发射终止符
-void Send_End()
-{
-   Send_IR(21);//0.54ms低(接收端)  高(发送端)
-}
-
-//一般情况编码方式 A' B' C'分别为ABC的反码，L引导码，S分隔码，A识别码(A=10110010=0xB2，预留方案时A=10110111=0xB7)
-//LAA'BB'CC' S LAA'BB'CC'
-//高位先发，用于分析时序
-//B各位 bit7-bit5 风速 bit4-bit0 默认为1
-//C各位 bit7-bit4 温度 bit3-bit2 模式 10-自动  bit1-bit0 00
-//      0000-17度                    00-制冷
-//      0001-18                      11-制热
-//      0011-19度                    01-抽风/送湿
-//      0010-20 //2
-//      0110-21 //6
-//      0111-22 //7
-//      0101-23 //5
-//      0100-24 //4
-//      1100-25 //c
-//      1101-26 //d
-//      1001-27 //9
-//      1000-28 //8
-//      1010-29 //a
-//      1011-30 //b
-void Send_Message(u8 A,u8 B,u8 C)
-{ 
-	 u8 temp;
-	 int i;
-	
-   Send_L();
-	 temp=A;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 temp=~A;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 
-	 temp=B;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 temp=~B;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 
-	 temp=C;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 temp=~C;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 
-   Send_S();	
-
-   Send_L();
-	 temp=A;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 temp=~A;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 
-	 temp=B;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 temp=~B;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 
-	 temp=C;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-	 temp=~C;
-	 for(i=0;i&lt;8;i++)
-	 {
-	   if(temp&amp;0x80) Send_h();
-		 else Send_l();
-			temp=temp&lt;&lt;1; 
-	 }
-   Send_S();
-	 Send_L();
-	 Send_Unknow();
-   Send_End();	 
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h1 id="4-实验分析"><a href="#4-实验分析" class="headerlink" title="4 实验分析"></a>4 实验分析</h1><p>通过stm32控制红外发射管将调制后的红外信号发送，以红外接收管对数据进行接收，通过示波器测量红外接收管接收到的信号，对通信数据正确性进行验证。<br>下面是通过示波器采集到的红外接收管上传出的部分信号：<br><img src="https://s1.ax1x.com/2022/07/16/j5Z9jx.png" alt="采集信号"><br><img src="https://s1.ax1x.com/2022/07/16/j5ZiDK.png" alt="采集信号"><br><img src="https://s1.ax1x.com/2022/07/16/j5ZPu6.png" alt="采集信号"><br>通过对空调进行控制，能完美控制空调。</p>
-
+	FATFS fs;
+	u32 len=0;
+	char str_rd[50]="";
+	f_mount(&amp;fs,"",1);//进行挂载
+	len=strlen(str_wr);
+	sd_write_data(str_wr,len);//写入数据
+    sd_read_data(str_rd,len);//读取数据
+    if(strcmp(str_wr,str_rd)==0) xil_printf("succeed!!\r\n");
+    else xil_printf("fail!!!\r\n");
+    return 0;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -719,7 +573,7 @@ void Send_Message(u8 A,u8 B,u8 C)
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wlinkjt.github.io/2022/03/15/qian-ru-shi-ji-chu-tong-xin-zhi-hong-wai-tong-xin/">https://wlinkjt.github.io/2022/03/15/qian-ru-shi-ji-chu-tong-xin-zhi-hong-wai-tong-xin/</a>
+                    <a href="https://wlinkjt.github.io/2022/07/16/zynq-qian-ru-shi-kai-fa-yi/">https://wlinkjt.github.io/2022/07/16/zynq-qian-ru-shi-kai-fa-yi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -757,8 +611,8 @@ void Send_Message(u8 A,u8 B,u8 C)
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
-                                    <span class="chip bg-color">嵌入式通信</span>
+                                <a href="/tags/ZYNQ/">
+                                    <span class="chip bg-color">ZYNQ</span>
                                 </a>
                             
                         </div>
@@ -936,13 +790,13 @@ void Send_Message(u8 A,u8 B,u8 C)
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/">
+                <a href="/2022/07/16/freertos-ji-chu-yi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="嵌入式基础通信之IIC">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="freeRTOS基础（一）">
                         
-                        <span class="card-title">嵌入式基础通信之IIC</span>
+                        <span class="card-title">freeRTOS基础（一）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -966,8 +820,8 @@ void Send_Message(u8 A,u8 B,u8 C)
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
-                        <span class="chip bg-color">嵌入式通信</span>
+                    <a href="/tags/freeRTOS/">
+                        <span class="chip bg-color">freeRTOS</span>
                     </a>
                     
                 </div>
@@ -981,13 +835,13 @@ void Send_Message(u8 A,u8 B,u8 C)
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/01/12/hello-world/">
+                <a href="/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-spi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="MOS管基本知识回顾以及应用">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="嵌入式基础通信之SPI">
                         
-                        <span class="card-title">MOS管基本知识回顾以及应用</span>
+                        <span class="card-title">嵌入式基础通信之SPI</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -998,7 +852,7 @@ void Send_Message(u8 A,u8 B,u8 C)
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-16
                             </span>
                         <span class="publish-author">
                             
@@ -1007,6 +861,14 @@ void Send_Message(u8 A,u8 B,u8 C)
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
+                        <span class="chip bg-color">嵌入式通信</span>
+                    </a>
+                    
                 </div>
                 
             </div>
