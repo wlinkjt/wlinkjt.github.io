@@ -6,7 +6,7 @@
   <link href="https://wlinkjt.github.io/atom.xml" rel="self"/>
   
   <link href="https://wlinkjt.github.io/"/>
-  <updated>2022-07-16T09:13:27.436Z</updated>
+  <updated>2022-07-17T03:21:34.514Z</updated>
   <id>https://wlinkjt.github.io/</id>
   
   <author>
@@ -21,8 +21,17 @@
     <link href="https://wlinkjt.github.io/2022/07/16/freertos-ji-chu-yi/"/>
     <id>https://wlinkjt.github.io/2022/07/16/freertos-ji-chu-yi/</id>
     <published>2022-07-16T09:12:22.000Z</published>
-    <updated>2022-07-16T09:13:27.436Z</updated>
+    <updated>2022-07-17T03:21:34.514Z</updated>
     
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;本篇主要对FreeRTOS的任务与中断进行初步讲解记录&lt;/p&gt;
+&lt;h1 id=&quot;1-FreeRTOS任务&quot;&gt;&lt;a href=&quot;#1-FreeRTOS任务&quot; class=&quot;headerlink&quot; title=&quot;1 FreeRTOS任务&quot;&gt;&lt;/a&gt;1</summary>
+        
+      
     
     
     
@@ -105,27 +114,6 @@
     
     
     <category term="嵌入式通信" scheme="https://wlinkjt.github.io/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MOS管基本知识回顾以及应用</title>
-    <link href="https://wlinkjt.github.io/2022/01/12/hello-world/"/>
-    <id>https://wlinkjt.github.io/2022/01/12/hello-world/</id>
-    <published>2022-01-12T09:06:01.637Z</published>
-    <updated>2022-05-18T09:25:21.239Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
-        
-      
-    
-    
-    
     
   </entry>
   
