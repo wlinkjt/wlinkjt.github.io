@@ -458,7 +458,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    919
+                    918
                 </div>
                 
 
@@ -484,7 +484,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="1-IIC简介"><a href="#1-IIC简介" class="headerlink" title="1 IIC简介"></a>1 IIC简介</h1><p>IIC(Inter－Integrated Circuit)是由飞利浦公司开发的两线式串行通信方式，主要用于微控制器与外围设备之间的通信。其传输数据量较小，且传输距离较短，在同一时刻只能有一个主机。由于IIC是为了与低速设备通信而发明的，因此IIC的传输速率低，不及SPI等通信方式。但高速 IIC 总线一般也可达400kbps 以上。</p>
-<h1 id="2-IIC时序分析"><a href="#2-IIC时序分析" class="headerlink" title="2 IIC时序分析"></a>2 IIC时序分析</h1><p>IIC由两条总线组成，分别是双向的数据传输线SDA以及串行时钟线SCL。<br>在IIC传输数据的过程中，总共有三种类型的信号，分别是开始信号，结束信号以及应答信号。下面对这三种信号进行分析。<br>首先是开始信号，该信号开始的标志为SCL为高电平时，SDA由高电平转向低电平，数据开始传输。<br>之后是结束信号，该信号结束的标志为SCL为高电平时，SDA由低电平转向高电平，数据结束传输。<br>—结束信号与开始信号的SDA变化刚好相反—<br>—由于开始信号要求SCL为高电平，因此IIC通信SCL与SDA需要接上拉电阻，保持初始状态都为高电平—<br>—目前有些器件IIC已经内置上拉电阻，因此是否接上拉电阻酌情考虑—<br>对于应答信号，则是在接收数据的IC接收到8bit数据后向发送数据的IC发送特定的低电平脉冲，表示已收到数据。IIC总线时序图如图1所示<br><img src="https://s1.ax1x.com/2022/07/18/jo7cVK.md.png" alt="图1 IIC总线时序图"><br>对于IIC数据传输过程，其时序图如图2所示。<br><img src="https://s1.ax1x.com/2022/07/18/jo725D.md.jpg" alt="图2 IIC数据传输过程"></p>
+<h1 id="2-IIC时序分析"><a href="#2-IIC时序分析" class="headerlink" title="2 IIC时序分析"></a>2 IIC时序分析</h1><p>IIC由两条总线组成，分别是双向的数据传输线SDA以及串行时钟线SCL。<br>在IIC传输数据的过程中，总共有三种类型的信号，分别是开始信号，结束信号以及应答信号。下面对这三种信号进行分析。<br>首先是开始信号，该信号开始的标志为SCL为高电平时，SDA由高电平转向低电平，数据开始传输。<br>之后是结束信号，该信号结束的标志为SCL为高电平时，SDA由低电平转向高电平，数据结束传输。<br><strong>结束信号与开始信号的SDA变化刚好相反</strong><br><strong>由于开始信号要求SCL为高电平，因此IIC通信SCL与SDA需要接上拉电阻，保持初始状态都为高电平</strong><br><strong>目前有些器件IIC已经内置上拉电阻，因此是否接上拉电阻酌情考虑</strong><br>对于应答信号，则是在接收数据的IC接收到8bit数据后向发送数据的IC发送特定的低电平脉冲，表示已收到数据。IIC总线时序图如图1所示<br><img src="https://s1.ax1x.com/2022/07/18/jo7cVK.md.png" alt="图1 IIC总线时序图"><br>对于IIC数据传输过程，其时序图如图2所示。<br><img src="https://s1.ax1x.com/2022/07/18/jo725D.md.jpg" alt="图2 IIC数据传输过程"></p>
 <h1 id="3-程序代码"><a href="#3-程序代码" class="headerlink" title="3 程序代码"></a>3 程序代码</h1><p>目前许多MCU都已集成硬件IIC，直接进行相应设置即可。但考虑到移植的兼容性以及加深个人对IIC的理解，程序采用通用IO模拟IIC。参考正点原子的例程，下面给出了IO口模拟IIC的程序。</p>
 <pre class="line-numbers language-none"><code class="language-none">//初始化IIC
 void IIC_Init(void)
@@ -849,7 +849,7 @@ u8 IIC_Read_Byte(unsigned char ack)
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-spi/">
+                <a href="/2022/03/20/qian-ru-shi-ji-chu-tong-xin-zhi-spi/">
                     <div class="card-image">
                         
                         
@@ -866,7 +866,7 @@ u8 IIC_Read_Byte(unsigned char ack)
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-07-16
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-20
                         </span>
                         <span class="publish-author">
                             
@@ -1129,7 +1129,7 @@ u8 IIC_Read_Byte(unsigned char ack)
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">4.8k</span>
+                        class="white-color">5.6k</span>
             
             
             
