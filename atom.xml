@@ -6,7 +6,7 @@
   <link href="https://wlinkjt.github.io/atom.xml" rel="self"/>
   
   <link href="https://wlinkjt.github.io/"/>
-  <updated>2022-07-17T03:21:34.514Z</updated>
+  <updated>2022-07-17T02:37:48.194Z</updated>
   <id>https://wlinkjt.github.io/</id>
   
   <author>
@@ -15,30 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>freeRTOS基础（一）</title>
-    <link href="https://wlinkjt.github.io/2022/07/16/freertos-ji-chu-yi/"/>
-    <id>https://wlinkjt.github.io/2022/07/16/freertos-ji-chu-yi/</id>
-    <published>2022-07-16T09:12:22.000Z</published>
-    <updated>2022-07-17T03:21:34.514Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;本篇主要对FreeRTOS的任务与中断进行初步讲解记录&lt;/p&gt;
-&lt;h1 id=&quot;1-FreeRTOS任务&quot;&gt;&lt;a href=&quot;#1-FreeRTOS任务&quot; class=&quot;headerlink&quot; title=&quot;1 FreeRTOS任务&quot;&gt;&lt;/a&gt;1</summary>
-        
-      
-    
-    
-    
-    
-    <category term="freeRTOS" scheme="https://wlinkjt.github.io/tags/freeRTOS/"/>
-    
-  </entry>
   
   <entry>
     <title>ZYNQ嵌入式开发（一）</title>
@@ -81,11 +57,19 @@
   
   <entry>
     <title>嵌入式基础通信之IIC</title>
-    <link href="https://wlinkjt.github.io/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/"/>
-    <id>https://wlinkjt.github.io/2022/07/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/</id>
-    <published>2022-07-16T09:09:30.000Z</published>
-    <updated>2022-07-16T09:13:23.012Z</updated>
+    <link href="https://wlinkjt.github.io/2022/03/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/"/>
+    <id>https://wlinkjt.github.io/2022/03/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/</id>
+    <published>2022-03-16T09:09:30.000Z</published>
+    <updated>2022-07-18T13:46:32.784Z</updated>
     
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;1-IIC简介&quot;&gt;&lt;a href=&quot;#1-IIC简介&quot; class=&quot;headerlink&quot; title=&quot;1 IIC简介&quot;&gt;&lt;/a&gt;1 IIC简介&lt;/h1&gt;&lt;p&gt;IIC(Inter－Integrated</summary>
+        
+      
     
     
     
@@ -114,6 +98,30 @@
     
     
     <category term="嵌入式通信" scheme="https://wlinkjt.github.io/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>freeRTOS基础（一）</title>
+    <link href="https://wlinkjt.github.io/2021/08/16/freertos-ji-chu-yi/"/>
+    <id>https://wlinkjt.github.io/2021/08/16/freertos-ji-chu-yi/</id>
+    <published>2021-08-16T09:12:22.000Z</published>
+    <updated>2022-07-17T03:26:51.949Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;本篇主要对FreeRTOS的任务与中断进行初步讲解记录&lt;/p&gt;
+&lt;h1 id=&quot;1-FreeRTOS任务&quot;&gt;&lt;a href=&quot;#1-FreeRTOS任务&quot; class=&quot;headerlink&quot; title=&quot;1 FreeRTOS任务&quot;&gt;&lt;/a&gt;1</summary>
+        
+      
+    
+    
+    
+    
+    <category term="freeRTOS" scheme="https://wlinkjt.github.io/tags/freeRTOS/"/>
     
   </entry>
   
