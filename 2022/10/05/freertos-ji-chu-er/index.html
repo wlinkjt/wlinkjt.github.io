@@ -4,9 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="ZYNQ嵌入式开发（一）, 无兴之的博客">
-    <meta name="description" content="本篇主要对如何进行zynq嵌入式开发的流程进行介绍。开发环境为vivado 2018.3
-整体流程zynq嵌入式开发流程如下图1，主要分为6步。对于初学者来说，首先需要掌握硬件环境搭建，也就是前4步。下面以创建读写SD卡并通过串口发送消息为">
+    <meta name="keywords" content="FreeRTOS基础（二）, 无兴之的博客">
+    <meta name="description" content="本篇主要对FreeRTOS的任务创建以及调度等进行源码分析
+1 FreeRTOS列表和列表项想要搞清楚FreeRTOS的任务调度原理，首先需要了解其列表与列表项。因为FreeRTOS任务的状态变换都是通过列表来完成的。
+1.1 列表与列表项">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +19,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>ZYNQ嵌入式开发（一） | 无兴之的博客</title>
+    <title>FreeRTOS基础（二） | 无兴之的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -313,12 +314,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">ZYNQ嵌入式开发（一）</h1>
+                    <h1 class="description center-align post-title">FreeRTOS基础（二）</h1>
                 </div>
             </div>
         </div>
@@ -434,8 +435,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/ZYNQ/">
-                                <span class="chip bg-color">ZYNQ</span>
+                            <a href="/tags/FreeRTOS/">
+                                <span class="chip bg-color">FreeRTOS</span>
                             </a>
                         
                     </div>
@@ -450,7 +451,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-04-01
+                    2022-10-05
                 </div>
                 
 
@@ -459,7 +460,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    738
+                    1.6k
                 </div>
                 
 
@@ -484,70 +485,202 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>本篇主要对如何进行zynq嵌入式开发的流程进行介绍。开发环境为vivado 2018.3</p>
-<h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><p>zynq嵌入式开发流程如下图1，主要分为6步。对于初学者来说，首先需要掌握硬件环境搭建，也就是前4步。<br><img src="https://s1.ax1x.com/2022/07/17/j579Ag.png" alt="图1 zynq嵌入式开发流程"><br>下面以创建读写SD卡并通过串口发送消息为例进行流程讲解。</p>
-<h1 id="硬件环境搭建"><a href="#硬件环境搭建" class="headerlink" title="硬件环境搭建"></a>硬件环境搭建</h1><p>首先打开vivado界面，选择create project，在创建好工程名后一路点击next，选择好自己芯片型号后，最后得到图2所示的界面。<br><img src="https://s1.ax1x.com/2022/07/16/j56SJS.md.png" alt="图2 工程创建完成"><br>在工程界面，选择左边IP INTEGRATOR下的create block design。再点击diagram下的“+”，在弹出的选择框中，输入zynq，如图3所示，双击该选项，得到如图4所示的，最初始的PS。<br><img src="https://s1.ax1x.com/2022/07/16/j5yzi8.md.png" alt="图3 选择PS"><br><img src="https://s1.ax1x.com/2022/07/16/j56pRg.md.png" alt="图4 初始化PS"><br>由于本例程只使用了SD卡的读写以及UART，并没有涉及到其他接口，因此需要对该PS进行设置。<br>DDR3的设置，选择适配自己的DDR型号<br><img src="https://s1.ax1x.com/2022/07/16/j56FLn.md.png" alt="图5 DDR3设置"><br>时钟的设置<br><img src="https://s1.ax1x.com/2022/07/16/j56iss.md.png" alt="图6 时钟设置"><br>IO选择，由于例程只用到SD以及UART，因此只勾选SD和UART的引脚，注意BANK1为1.8V<br><img src="https://s1.ax1x.com/2022/07/16/j56AZq.md.png" alt="图7 IO的选择"><br>串口的设置<br><img src="https://s1.ax1x.com/2022/07/16/j56Ed0.md.png" alt="图8 串口设置"><br>复位去除<br><img src="https://s1.ax1x.com/2022/07/16/j56VoV.md.png" alt="图9 复位去除"><br>设置完成后点击run block automation，创建自己的IP核，最后如10所示.<br><img src="https://s1.ax1x.com/2022/07/16/j56eiT.md.png" alt="图10 设置完成后的IP核"><br>之后右击工程，选择generate output products,如图11所示。<br><img src="https://s1.ax1x.com/2022/07/16/j56mJU.png" alt="图11 生成输出文件"><br>之后右击工程，生成HDL wrapper后，选择file-&gt;export hardware，该处不点击生成比特流文件，因为并没有用到PL的部分。<br>在完成以上操作后，硬件环境搭建完成，进入SDK进行编写。</p>
-<h1 id="SDK库文件添加"><a href="#SDK库文件添加" class="headerlink" title="SDK库文件添加"></a>SDK库文件添加</h1><p>此处操作主要添加板载支持文件——FAT32文件系统.<br>在打开的SDK页面，选择file—&gt;new—&gt;application project.填好工程名后，选择空工程。<br>之后右击选择board support package settings,如图12.<br><img src="https://s1.ax1x.com/2022/07/16/j56nWF.md.png" alt="图12 板载支持包设置"><br>勾选xilffs文件即完成FAT32系统支持包的添加。</p>
-<h1 id="程序编写"><a href="#程序编写" class="headerlink" title="程序编写"></a>程序编写</h1><p>本例程完成SD卡的读写以及通过串口打印是否读写正确。程序代码如下：</p>
-<pre class="line-numbers language-none"><code class="language-none">#include "xil_printf.h"
-#include "ff.h"
-#include "xparameters.h"
-
-#define file_name "example.txt"
-
-char str_wr[50]="1315";
-//将wr_data[]中数据写入wr_len个
-void sd_write_data(char wr_data[],u32 wr_len)
+                <p>本篇主要对FreeRTOS的任务创建以及调度等进行源码分析</p>
+<h1 id="1-FreeRTOS列表和列表项"><a href="#1-FreeRTOS列表和列表项" class="headerlink" title="1 FreeRTOS列表和列表项"></a>1 FreeRTOS列表和列表项</h1><p>想要搞清楚FreeRTOS的任务调度原理，首先需要了解其列表与列表项。因为FreeRTOS任务的状态变换都是通过列表来完成的。</p>
+<h2 id="1-1-列表与列表项定义"><a href="#1-1-列表与列表项定义" class="headerlink" title="1.1 列表与列表项定义"></a>1.1 列表与列表项定义</h2><p>FreeRTOS的列表与列表项与数据结构的链表相似。在list.h文件中定义如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">typedef struct xLIST
 {
-	FIL file;
-	UINT bw;
-
-	f_open(&amp;file,file_name,FA_CREATE_ALWAYS|FA_WRITE|FA_READ);//打开（创建）文件
-	f_lseek(&amp;file,0);//移动读写指针
-	f_write(&amp;file,wr_data,wr_len,&amp;bw);//写数据
-	f_close(&amp;file);//关闭文件
-
-}
-//读出rd_len个数据到rd_data中
-void sd_read_data(char rd_data[],u32 rd_len)
+	listFIRST_LIST_INTEGRITY_CHECK_VALUE	  &lt;font color='green'&gt;//检测列表完整性，默认不开启&lt;/font&gt;
+	volatile UBaseType_t uxNumberOfItems;     //列表项的数量
+	ListItem_t * configLIST_VOLATILE pxIndex; //当前列表项索引号	
+	MiniListItem_t xListEnd;				  //该列表中最后一个列表项		
+	listSECOND_LIST_INTEGRITY_CHECK_VALUE     //检测列表完整性，默认不开启		
+} List_t;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>该结构体为FreeRTOS中列表项的定义，除去开头与结尾检测完整性的成员外，只包含3个成员变量，分别为列表项的数量，列表项索引号以及列表中最后一个列表项。<br>下面对列表项的结构体进行介绍。首先对完整的列表项定义进行介绍</p>
+<pre class="line-numbers language-none"><code class="language-none">struct xLIST_ITEM
 {
-	FIL file;
-	UINT br;
-
-	f_open(&amp;file,file_name,FA_READ);//打开文件
-	f_lseek(&amp;file,0);//移动读写指针
-	f_read(&amp;file,rd_data,rd_len,&amp;br);//写数据
-	f_close(&amp;file);//关闭文件
-
-}
-//将SD卡格式化
-void sd_mount()
+	listFIRST_LIST_ITEM_INTEGRITY_CHECK_VALUE		    //完整性检测
+	configLIST_VOLATILE TickType_t xItemValue;			//当前索引值
+	struct xLIST_ITEM * configLIST_VOLATILE pxNext;		//下一个索引
+	struct xLIST_ITEM * configLIST_VOLATILE pxPrevious;	//上一个索引
+	void * pvOwner;										//归属哪个任务
+	struct xLIST * configLIST_VOLATILE pxContainer;		//归属哪个列表
+	listSECOND_LIST_ITEM_INTEGRITY_CHECK_VALUE			//完整性检测
+};<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面为FreeRTOS中对列表项的完整定义，为保证内存的充分利用，FreeRTOS中还定义了迷你列表项，其定义如下</p>
+<pre class="line-numbers language-none"><code class="language-none">struct xMINI_LIST_ITEM
 {
-    FRESULT state;
-	FATFS fs;
-    BYTE work[FF_MAX_SS];
-    state=f_mount(&amp;fs,"",1);
-    if(state!=FR_OK)
-    {
-    	xil_printf("not fat32");
-    	//格式化SD卡
-    	f_mkfs("",FM_FAT32,0,work,sizeof work);
-    	state=f_mount(&amp;fs,"",1);
-    }
-}
-int main()
+	listFIRST_LIST_ITEM_INTEGRITY_CHECK_VALUE		    //完整性检测
+	configLIST_VOLATILE TickType_t xItemValue;          //当前索引值
+	struct xLIST_ITEM * configLIST_VOLATILE pxNext;     //下一个索引值
+	struct xLIST_ITEM * configLIST_VOLATILE pxPrevious; //上一个索引值
+};<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>迷你列表项相对完整列表项省去了其归属的对象参数。</p>
+<h2 id="1-2-列表与列表项函数"><a href="#1-2-列表与列表项函数" class="headerlink" title="1.2 列表与列表项函数"></a>1.2 列表与列表项函数</h2><p>列表与列表项的函数不多，主要包含列表与列表项的初始化、列表元素的插入、列表元素的末尾插入以及列表元素的删除，下面分别对其进行源码分析</p>
+<h3 id="1-2-1-列表与列表项的初始化"><a href="#1-2-1-列表与列表项的初始化" class="headerlink" title="1.2.1 列表与列表项的初始化"></a>1.2.1 列表与列表项的初始化</h3><p>首先对列表的初始化进行分析，其源码如下</p>
+<pre class="line-numbers language-none"><code class="language-none">void vListInitialise( List_t * const pxList )
 {
-	FATFS fs;
-	u32 len=0;
-	char str_rd[50]="";
-	f_mount(&amp;fs,"",1);//进行挂载
-	len=strlen(str_wr);
-	sd_write_data(str_wr,len);//写入数据
-    sd_read_data(str_rd,len);//读取数据
-    if(strcmp(str_wr,str_rd)==0) xil_printf("succeed!!\r\n");
-    else xil_printf("fail!!!\r\n");
-    return 0;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+	pxList-&gt;pxIndex = ( ListItem_t * ) &amp;( pxList-&gt;xListEnd );	          //列表当前索引指向列表尾项
+	pxList-&gt;xListEnd.xItemValue = portMAX_DELAY;                          //列表尾项赋值初始化
+	pxList-&gt;xListEnd.pxNext = ( ListItem_t * ) &amp;( pxList-&gt;xListEnd );	  //列表后一个元素指向自己
+	pxList-&gt;xListEnd.pxPrevious = ( ListItem_t * ) &amp;( pxList-&gt;xListEnd ); //列表前一个元素指向自己
+	pxList-&gt;uxNumberOfItems = ( UBaseType_t ) 0U;                         //列表项个数为0
+
+	listSET_LIST_INTEGRITY_CHECK_1_VALUE( pxList );//完整性检测
+	listSET_LIST_INTEGRITY_CHECK_2_VALUE( pxList );
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过对列表的初始化函数可以看到，主要对列表尾项进行赋值以及最后将列表项的个数进行了初始化。<br>下面对列表项的初始化函数进行分析。源代码如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">void vListInitialiseItem( ListItem_t * const pxItem )
+{
+	pxItem-&gt;pxContainer = NULL;  //列表归属为空
+
+	listSET_FIRST_LIST_ITEM_INTEGRITY_CHECK_VALUE( pxItem ); //完整性检测
+	listSET_SECOND_LIST_ITEM_INTEGRITY_CHECK_VALUE( pxItem );
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>列表项的初始化相对比较简单，只是将其归属的列表设置为空。</p>
+<h3 id="1-2-2-列表项插入"><a href="#1-2-2-列表项插入" class="headerlink" title="1.2.2 列表项插入"></a>1.2.2 列表项插入</h3><p>列表项的插入是通过操作列表来进行的。函数原型如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">void vListInsert( List_t * const pxList, ListItem_t * const pxNewListItem )
+{
+    ListItem_t *pxIterator;
+    const TickType_t xValueOfInsertion = pxNewListItem-&gt;xItemValue;//获取插入列表项的值
+
+	listTEST_LIST_INTEGRITY( pxList );             //完整性检测
+	listTEST_LIST_ITEM_INTEGRITY( pxNewListItem ); //完整性检测
+
+	if( xValueOfInsertion == portMAX_DELAY )       //列表项值为最大值 
+	{
+		pxIterator = pxList-&gt;xListEnd.pxPrevious;
+	}
+	else
+	{
+		for( pxIterator = ( ListItem_t * ) &amp;( pxList-&gt;xListEnd ); pxIterator-&gt;pxNext-&gt;xItemValue &lt;= xValueOfInsertion;pxIterator= pxIterator-&gt;pxNext ) //升序遍历，直到找到小于插入列表项的值的最大值
+		{
+
+		}
+	}
+
+	pxNewListItem-&gt;pxNext = pxIterator-&gt;pxNext;
+	pxNewListItem-&gt;pxNext-&gt;pxPrevious = pxNewListItem;//插入列表项
+	
+	pxNewListItem-&gt;pxPrevious = pxIterator;
+	pxIterator-&gt;pxNext = pxNewListItem;    //插入列表项
+
+	pxNewListItem-&gt;pxContainer = pxList;   //定义所属列表
+
+	( pxList-&gt;uxNumberOfItems )++;         //列表项个数加一
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从列表项插入函数来看，在FreeRTOS列表结构中，列表项是按列表项值进行升序排列的。</p>
+<h3 id="1-2-3-列表项末尾插入"><a href="#1-2-3-列表项末尾插入" class="headerlink" title="1.2.3 列表项末尾插入"></a>1.2.3 列表项末尾插入</h3><p>列表项末尾插入相对较为简单，插入列表项只需放到被插入列表当前指向列表项的前面一个即可。具体源码如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">void vListInsertEnd( List_t * const pxList, ListItem_t * const pxNewListItem )
+{
+    ListItem_t * const pxIndex = pxList-&gt;pxIndex;  //获取被插入列表当前索引值
+
+	listTEST_LIST_INTEGRITY( pxList );             //完整性检测
+	listTEST_LIST_ITEM_INTEGRITY( pxNewListItem ); //完整性检测
+
+	pxNewListItem-&gt;pxNext = pxIndex;               
+	pxNewListItem-&gt;pxPrevious = pxIndex-&gt;pxPrevious;//插入列表项
+
+	mtCOVERAGE_TEST_DELAY();
+
+	pxIndex-&gt;pxPrevious-&gt;pxNext = pxNewListItem;
+	pxIndex-&gt;pxPrevious = pxNewListItem;           //插入列表项
+
+	pxNewListItem-&gt;pxContainer = pxList;           //定义所属列表
+
+	( pxList-&gt;uxNumberOfItems )++;                 //列表项个数加一
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="1-2-4-列表项删除"><a href="#1-2-4-列表项删除" class="headerlink" title="1.2.4 列表项删除"></a>1.2.4 列表项删除</h3><p>列表项的删除通过将列表项移除所属列表，其源码如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove )
+{
+    List_t * const pxList = pxItemToRemove-&gt;pxContainer; //获取删除列表项所属的列表
+
+	pxItemToRemove-&gt;pxNext-&gt;pxPrevious = pxItemToRemove-&gt;pxPrevious;
+	pxItemToRemove-&gt;pxPrevious-&gt;pxNext = pxItemToRemove-&gt;pxNext;    //删除列表项
+
+	mtCOVERAGE_TEST_DELAY();
+
+	if( pxList-&gt;pxIndex == pxItemToRemove )           //如果当前列表索引值是当前被删除的列表项
+	{
+		pxList-&gt;pxIndex = pxItemToRemove-&gt;pxPrevious; //列表索引值前移
+	}
+	else                                              //不做处理
+	{
+		mtCOVERAGE_TEST_MARKER();
+	}
+
+	pxItemToRemove-&gt;pxContainer = NULL;               //所属列表为空
+	( pxList-&gt;uxNumberOfItems )--;                    //原列表中列表项个数减一
+	return pxList-&gt;uxNumberOfItems;                   //返回列表中还存在的列表项数量
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过对列表以及列表项函数进行分析，可以看到FreeRTOS的列表与数据结构的链表操作一样。而FreeRTOS的任务调度就是通过操作列表以及列表项来实现的，下面对FreeRTOS的任务调度进行分析。</p>
+<h1 id="2-FreeRTOS任务调度"><a href="#2-FreeRTOS任务调度" class="headerlink" title="2 FreeRTOS任务调度"></a>2 FreeRTOS任务调度</h1><p>上面我们以及对FreeRTOS的列表以及列表项的知识进行了详细的回顾以及学习，下面对FreeRTOS的任务调度进行分析。<br>在进行任务调度分析之前，首先需要了解任务控制块这个结构体，其定义如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">typedef struct tskTaskControlBlock 		
+{
+	volatile StackType_t	*pxTopOfStack;  //任务堆栈栈顶
+    //使用MPU
+	#if ( portUSING_MPU_WRAPPERS == 1 )
+		xMPU_SETTINGS	xMPUSettings;	
+	#endif
+
+	ListItem_t			xStateListItem;	                      //任务状态列表
+	ListItem_t			xEventListItem;	 					  //任务事件列表
+	UBaseType_t			uxPriority;		                      //任务优先级
+	StackType_t			*pxStack;		                      //任务堆栈
+	char				pcTaskName[ configMAX_TASK_NAME_LEN ];//任务名
+    //栈向上生长，定义栈顶
+	#if ( ( portSTACK_GROWTH &gt; 0 ) || ( configRECORD_STACK_HIGH_ADDRESS == 1 ) )
+		StackType_t		*pxEndOfStack;		
+	#endif
+    //临界区栈深度
+	#if ( portCRITICAL_NESTING_IN_TCB == 1 )
+		UBaseType_t		uxCriticalNesting;	
+	#endif
+    //调试追踪时，TCB与任务的数量
+	#if ( configUSE_TRACE_FACILITY == 1 )
+		UBaseType_t		uxTCBNumber;		
+		UBaseType_t		uxTaskNumber;	
+	#endif
+    //互斥信号量中，任务的基础优先级以及持有的信号量个数
+	#if ( configUSE_MUTEXES == 1 )
+		UBaseType_t		uxBasePriority;		
+		UBaseType_t		uxMutexesHeld;
+	#endif
+    //
+	#if ( configUSE_APPLICATION_TASK_TAG == 1 )
+		TaskHookFunction_t pxTaskTag;
+	#endif
+
+	#if( configNUM_THREAD_LOCAL_STORAGE_POINTERS &gt; 0 )
+		void			*pvThreadLocalStoragePointers[ configNUM_THREAD_LOCAL_STORAGE_POINTERS ];
+	#endif
+    //task运行的总时间
+	#if( configGENERATE_RUN_TIME_STATS == 1 )
+		uint32_t		ulRunTimeCounter;	
+	#endif
+    //
+	#if ( configUSE_NEWLIB_REENTRANT == 1 )
+		struct	_reent xNewLib_reent;
+	#endif
+
+	#if( configUSE_TASK_NOTIFICATIONS == 1 )
+		volatile uint32_t ulNotifiedValue;
+		volatile uint8_t ucNotifyState;
+	#endif
+
+	
+	#if( tskSTATIC_AND_DYNAMIC_ALLOCATION_POSSIBLE != 0 ) 
+		uint8_t	ucStaticallyAllocated; 		
+	#endif
+
+	#if( INCLUDE_xTaskAbortDelay == 1 )
+		uint8_t ucDelayAborted;
+	#endif
+
+	#if( configUSE_POSIX_ERRNO == 1 )
+		int iTaskErrno;
+	#endif
+} tskTCB;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -573,7 +706,7 @@ int main()
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wlinkjt.github.io/2022/04/01/zynq-qian-ru-shi-kai-fa-yi/">https://wlinkjt.github.io/2022/04/01/zynq-qian-ru-shi-kai-fa-yi/</a>
+                    <a href="https://wlinkjt.github.io/2022/10/05/freertos-ji-chu-er/">https://wlinkjt.github.io/2022/10/05/freertos-ji-chu-er/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -611,8 +744,8 @@ int main()
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/ZYNQ/">
-                                    <span class="chip bg-color">ZYNQ</span>
+                                <a href="/tags/FreeRTOS/">
+                                    <span class="chip bg-color">FreeRTOS</span>
                                 </a>
                             
                         </div>
@@ -786,9 +919,10 @@ int main()
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/10/05/freertos-ji-chu-er/">
                     <div class="card-image">
@@ -806,9 +940,9 @@ int main()
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-10-05
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-05
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -817,6 +951,7 @@ int main()
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -835,13 +970,13 @@ int main()
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/03/20/qian-ru-shi-ji-chu-tong-xin-zhi-spi/">
+                <a href="/2022/04/01/zynq-qian-ru-shi-kai-fa-yi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="嵌入式基础通信之SPI">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="ZYNQ嵌入式开发（一）">
                         
-                        <span class="card-title">嵌入式基础通信之SPI</span>
+                        <span class="card-title">ZYNQ嵌入式开发（一）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -852,7 +987,7 @@ int main()
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-04-01
                             </span>
                         <span class="publish-author">
                             
@@ -865,8 +1000,8 @@ int main()
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
-                        <span class="chip bg-color">嵌入式通信</span>
+                    <a href="/tags/ZYNQ/">
+                        <span class="chip bg-color">ZYNQ</span>
                     </a>
                     
                 </div>
