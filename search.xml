@@ -4,22 +4,9 @@
   
     
     <entry>
-      <title>RAG详解</title>
-      <link href="/2026/04/06/rag-xiang-jie/"/>
-      <url>/2026/04/06/rag-xiang-jie/</url>
-      
-        <content type="html"><![CDATA[<p>RAG详解</p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>hexo电脑更换迁移步骤</title>
-      <link href="/2025/04/06/hexo-dian-nao-geng-huan-qian-yi-bu-zou/"/>
-      <url>/2025/04/06/hexo-dian-nao-geng-huan-qian-yi-bu-zou/</url>
+      <title>hexo迁移步骤</title>
+      <link href="/2025/04/06/hexo-qian-yi-bu-zou/"/>
+      <url>/2025/04/06/hexo-qian-yi-bu-zou/</url>
       
         <content type="html"><![CDATA[<p>最近更换电脑后，原电脑数据需要迁移备份到新电脑上。其中，hexo迁移网上资料较多，但记叙不够清晰。<br>在经过实践之后，为保证下一次能够快速进行，特意对整个过程进行系统性的记录。<br>整体迁移步骤包含：<strong>原文件迁移</strong>，<strong>软件安装</strong>，<strong>本地git与GitHub公钥连接</strong>三部分</p><h1 id="1-原文件迁移"><a href="#1-原文件迁移" class="headerlink" title="1 原文件迁移"></a>1 原文件迁移</h1><p>需要拷贝原项目文件中的_config.yml，themes，source，scaffolds，package.json，.gitignore 等文件到新电脑新建的文件夹中；<br>嫌上述麻烦，也可以直接将原文件夹整个打包拷贝到新电脑上。</p><h1 id="2-软件安装"><a href="#2-软件安装" class="headerlink" title="2 软件安装"></a>2 软件安装</h1><p>安装hexo所需要依赖的软件，主要包含node，git，hexo。<br>node下载地址：<a href="https://nodejs.org/en">node</a><br>git下载地址：<a href="https://git-scm.com/">git</a></p><h2 id="2-1-node安装"><a href="#2-1-node安装" class="headerlink" title="2.1 node安装"></a>2.1 node安装</h2><p>node一路安装即可，没有太多注意事项，安装完成后，按下Windows+R，打开CMD窗口，输入</p><pre class="line-numbers language-none"><code class="language-none">npm -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>若返回版本号，则表示安装成功。</p><h2 id="2-2-git安装"><a href="#2-2-git安装" class="headerlink" title="2.2 git安装"></a>2.2 git安装</h2><p>安装过程中关注两点，一是要添加 Git Bash Here 到右键菜单，一是要把 Git 添加到全局变量，安装完成后，按下Windows+R，打开CMD窗口，输入</p><pre class="line-numbers language-none"><code class="language-none">git -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>若返回版本号，则表示安装成功。</p><h2 id="2-3-hexo相关安装"><a href="#2-3-hexo相关安装" class="headerlink" title="2.3 hexo相关安装"></a>2.3 hexo相关安装</h2><p>在新建的博客文件夹下，右击鼠标，打开git bash，输入下列代码</p><pre class="line-numbers language-none"><code class="language-none">npm install hexo-cli -gnpm install hexo-deployer-git --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p>等待安装完成即可</p><h1 id="3-本地git与GitHub公钥连接"><a href="#3-本地git与GitHub公钥连接" class="headerlink" title="3 本地git与GitHub公钥连接"></a>3 本地git与GitHub公钥连接</h1><p>打开git bash，输入以下命令：</p><pre class="line-numbers language-none"><code class="language-none">git config --global user.name "你的用户名"git config --global user.email "你的注册邮箱"ssh-keygen -t rsa -C "你的注册邮箱"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p>之后，一直确定，等待命令运行完后（生成一个奇怪的图案），找到id_rsa.pub 文件，一般在 C:\Users\用户名\.ssh 文件夹下（git界面也会显示）<br>打开该文件，复制里面的内容。<br>进入 Github 的个人设置界面，找到 SSH and GPG keys 选项，<br>选择新建 SSH key，将复制的内容粘贴到key的空白框里（一般都是以 ssh-rsa 开头的）即可。</p><h1 id="4-验证"><a href="#4-验证" class="headerlink" title="4 验证"></a>4 验证</h1><p>上述三个步骤顺利完成后，可用hexo命令进行验证</p><pre class="line-numbers language-none"><code class="language-none">hexo new "DocName"  //新建文档hexo clean          //清除缓存hexo s              //本地运行hexo g              //生成hexo d              //部署<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>上述命令验证无问题，迁移完成。</p>]]></content>
       
