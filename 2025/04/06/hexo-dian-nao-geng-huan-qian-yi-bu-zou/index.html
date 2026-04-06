@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="嵌入式基础通信之IIC, 无兴之的博客">
-    <meta name="description" content="1 IIC简介IIC(Inter－Integrated Circuit)是由飞利浦公司开发的两线式串行通信方式，主要用于微控制器与外围设备之间的通信。其传输数据量较小，且传输距离较短，在同一时刻只能有一个主机。由于IIC是为了与低速设备通信">
+    <meta name="keywords" content="hexo电脑更换迁移步骤, 无兴之的博客">
+    <meta name="description" content="最近更换电脑后，原电脑数据需要迁移备份到新电脑上。其中，hexo迁移网上资料较多，但记叙不够清晰。在经过实践之后，为保证下一次能够快速进行，特意对整个过程进行系统性的记录。整体迁移步骤包含：原文件迁移，软件安装，本地git与GitHub公钥">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>嵌入式基础通信之IIC | 无兴之的博客</title>
+    <title>hexo电脑更换迁移步骤 | 无兴之的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -312,12 +312,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">嵌入式基础通信之IIC</h1>
+                    <h1 class="description center-align post-title">hexo电脑更换迁移步骤</h1>
                 </div>
             </div>
         </div>
@@ -431,13 +431,9 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
-                                <span class="chip bg-color">嵌入式通信</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -449,7 +445,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-03-16
+                    2025-04-06
                 </div>
                 
 
@@ -458,7 +454,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    918
+                    597
                 </div>
                 
 
@@ -483,130 +479,32 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-IIC简介"><a href="#1-IIC简介" class="headerlink" title="1 IIC简介"></a>1 IIC简介</h1><p>IIC(Inter－Integrated Circuit)是由飞利浦公司开发的两线式串行通信方式，主要用于微控制器与外围设备之间的通信。其传输数据量较小，且传输距离较短，在同一时刻只能有一个主机。由于IIC是为了与低速设备通信而发明的，因此IIC的传输速率低，不及SPI等通信方式。但高速 IIC 总线一般也可达400kbps 以上。</p>
-<h1 id="2-IIC时序分析"><a href="#2-IIC时序分析" class="headerlink" title="2 IIC时序分析"></a>2 IIC时序分析</h1><p>IIC由两条总线组成，分别是双向的数据传输线SDA以及串行时钟线SCL。<br>在IIC传输数据的过程中，总共有三种类型的信号，分别是开始信号，结束信号以及应答信号。下面对这三种信号进行分析。<br>首先是开始信号，该信号开始的标志为SCL为高电平时，SDA由高电平转向低电平，数据开始传输。<br>之后是结束信号，该信号结束的标志为SCL为高电平时，SDA由低电平转向高电平，数据结束传输。<br><strong>结束信号与开始信号的SDA变化刚好相反</strong><br><strong>由于开始信号要求SCL为高电平，因此IIC通信SCL与SDA需要接上拉电阻，保持初始状态都为高电平</strong><br><strong>目前有些器件IIC已经内置上拉电阻，因此是否接上拉电阻酌情考虑</strong><br>对于应答信号，则是在接收数据的IC接收到8bit数据后向发送数据的IC发送特定的低电平脉冲，表示已收到数据。IIC总线时序图如图1所示<br><img src="https://s1.ax1x.com/2022/07/18/jo7cVK.md.png" alt="图1 IIC总线时序图"><br>对于IIC数据传输过程，其时序图如图2所示。<br><img src="https://s1.ax1x.com/2022/07/18/jo725D.md.jpg" alt="图2 IIC数据传输过程"></p>
-<h1 id="3-程序代码"><a href="#3-程序代码" class="headerlink" title="3 程序代码"></a>3 程序代码</h1><p>目前许多MCU都已集成硬件IIC，直接进行相应设置即可。但考虑到移植的兼容性以及加深个人对IIC的理解，程序采用通用IO模拟IIC。参考正点原子的例程，下面给出了IO口模拟IIC的程序。</p>
-<pre class="line-numbers language-none"><code class="language-none">//初始化IIC
-void IIC_Init(void)
-{					     
-	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_GPIOB, ENABLE );	//使能GPIOB时钟
-	   
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_7;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP ;   //推挽输出
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB, &amp;GPIO_InitStructure);
-	GPIO_SetBits(GPIOB,GPIO_Pin_6|GPIO_Pin_7); 	//PB6,PB7 输出高
-}
-//产生IIC起始信号
-void IIC_Start(void)
-{
-	SDA_OUT();     //sda线输出
-	IIC_SDA=1;	  	  
-	IIC_SCL=1;
-	delay_us(4);
- 	IIC_SDA=0;//START:when CLK is high,DATA change form high to low 
-	delay_us(4);
-	IIC_SCL=0;//钳住I2C总线，准备发送或接收数据 
-}	  
-//产生IIC停止信号
-void IIC_Stop(void)
-{
-	SDA_OUT();//sda线输出
-	IIC_SCL=0;
-	IIC_SDA=0;//STOP:when CLK is high DATA change form low to high
- 	delay_us(4);
-	IIC_SCL=1; 
-	IIC_SDA=1;//发送I2C总线结束信号
-	delay_us(4);							   	
-}
-//等待应答信号到来
-//返回值：1，接收应答失败
-//        0，接收应答成功
-u8 IIC_Wait_Ack(void)
-{
-	u8 ucErrTime=0;
-	SDA_IN();      //SDA设置为输入  
-	IIC_SDA=1;delay_us(1);	   
-	IIC_SCL=1;delay_us(1);	 
-	while(READ_SDA)
-	{
-		ucErrTime++;
-		if(ucErrTime&gt;250)
-		{
-			IIC_Stop();
-			return 1;
-		}
-	}
-	IIC_SCL=0;//时钟输出0 	   
-	return 0;  
-} 
-//产生ACK应答
-void IIC_Ack(void)
-{
-	IIC_SCL=0;
-	SDA_OUT();
-	IIC_SDA=0;
-	delay_us(2);
-	IIC_SCL=1;
-	delay_us(2);
-	IIC_SCL=0;
-}
-//不产生ACK应答		    
-void IIC_NAck(void)
-{
-	IIC_SCL=0;
-	SDA_OUT();
-	IIC_SDA=1;
-	delay_us(2);
-	IIC_SCL=1;
-	delay_us(2);
-	IIC_SCL=0;
-}					 				     
-//IIC发送一个字节
-//返回从机有无应答
-//1，有应答
-//0，无应答			  
-void IIC_Send_Byte(u8 txd)
-{                        
-    u8 t;   
-	SDA_OUT(); 	    
-    IIC_SCL=0;//拉低时钟开始数据传输
-    for(t=0;t&lt;8;t++)
-    {              
-        //IIC_SDA=(txd&amp;0x80)&gt;&gt;7;
-		if((txd&amp;0x80)&gt;&gt;7)
-			IIC_SDA=1;
-		else
-			IIC_SDA=0;
-		txd&lt;&lt;=1; 	  
-		delay_us(2);   //对TEA5767这三个延时都是必须的
-		IIC_SCL=1;
-		delay_us(2); 
-		IIC_SCL=0;	
-		delay_us(2);
-    }	 
-} 	    
-//读1个字节，ack=1时，发送ACK，ack=0，发送nACK   
-u8 IIC_Read_Byte(unsigned char ack)
-{
-	unsigned char i,receive=0;
-	SDA_IN();//SDA设置为输入
-    for(i=0;i&lt;8;i++ )
-	{
-        IIC_SCL=0; 
-        delay_us(2);
-		IIC_SCL=1;
-        receive&lt;&lt;=1;
-        if(READ_SDA)receive++;   
-		delay_us(1); 
-    }					 
-    if (!ack)
-        IIC_NAck();//发送nACK
-    else
-        IIC_Ack(); //发送ACK   
-    return receive;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                <p>最近更换电脑后，原电脑数据需要迁移备份到新电脑上。其中，hexo迁移网上资料较多，但记叙不够清晰。<br>在经过实践之后，为保证下一次能够快速进行，特意对整个过程进行系统性的记录。<br>整体迁移步骤包含：<strong>原文件迁移</strong>，<strong>软件安装</strong>，<strong>本地git与GitHub公钥连接</strong>三部分</p>
+<h1 id="1-原文件迁移"><a href="#1-原文件迁移" class="headerlink" title="1 原文件迁移"></a>1 原文件迁移</h1><p>需要拷贝原项目文件中的_config.yml，themes，source，scaffolds，package.json，.gitignore 等文件到新电脑新建的文件夹中；<br>嫌上述麻烦，也可以直接将原文件夹整个打包拷贝到新电脑上。</p>
+<h1 id="2-软件安装"><a href="#2-软件安装" class="headerlink" title="2 软件安装"></a>2 软件安装</h1><p>安装hexo所需要依赖的软件，主要包含node，git，hexo。<br>node下载地址：<a target="_blank" rel="noopener" href="https://nodejs.org/en">node</a><br>git下载地址：<a target="_blank" rel="noopener" href="https://git-scm.com/">git</a></p>
+<h2 id="2-1-node安装"><a href="#2-1-node安装" class="headerlink" title="2.1 node安装"></a>2.1 node安装</h2><p>node一路安装即可，没有太多注意事项，安装完成后，按下Windows+R，打开CMD窗口，输入</p>
+<pre class="line-numbers language-none"><code class="language-none">npm -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>若返回版本号，则表示安装成功。</p>
+<h2 id="2-2-git安装"><a href="#2-2-git安装" class="headerlink" title="2.2 git安装"></a>2.2 git安装</h2><p>安装过程中关注两点，一是要添加 Git Bash Here 到右键菜单，一是要把 Git 添加到全局变量，安装完成后，按下Windows+R，打开CMD窗口，输入</p>
+<pre class="line-numbers language-none"><code class="language-none">git -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>若返回版本号，则表示安装成功。</p>
+<h2 id="2-3-hexo相关安装"><a href="#2-3-hexo相关安装" class="headerlink" title="2.3 hexo相关安装"></a>2.3 hexo相关安装</h2><p>在新建的博客文件夹下，右击鼠标，打开git bash，输入下列代码</p>
+<pre class="line-numbers language-none"><code class="language-none">npm install hexo-cli -g
+npm install hexo-deployer-git --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>等待安装完成即可</p>
+<h1 id="3-本地git与GitHub公钥连接"><a href="#3-本地git与GitHub公钥连接" class="headerlink" title="3 本地git与GitHub公钥连接"></a>3 本地git与GitHub公钥连接</h1><p>打开git bash，输入以下命令：</p>
+<pre class="line-numbers language-none"><code class="language-none">git config --global user.name "你的用户名"
+git config --global user.email "你的注册邮箱"
+ssh-keygen -t rsa -C "你的注册邮箱"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>之后，一直确定，等待命令运行完后（生成一个奇怪的图案），找到id_rsa.pub 文件，一般在 C:\Users\用户名\.ssh 文件夹下（git界面也会显示）<br>打开该文件，复制里面的内容。<br>进入 Github 的个人设置界面，找到 SSH and GPG keys 选项，<br>选择新建 SSH key，将复制的内容粘贴到key的空白框里（一般都是以 ssh-rsa 开头的）即可。</p>
+<h1 id="4-验证"><a href="#4-验证" class="headerlink" title="4 验证"></a>4 验证</h1><p>上述三个步骤顺利完成后，可用hexo命令进行验证</p>
+<pre class="line-numbers language-none"><code class="language-none">hexo new "DocName"  //新建文档
+hexo clean          //清除缓存
+hexo s              //本地运行
+hexo g              //生成
+hexo d              //部署<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上述命令验证无问题，迁移完成。</p>
+
                 
             </div>
             <hr/>
@@ -632,7 +530,7 @@ u8 IIC_Read_Byte(unsigned char ack)
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wlinkjt.github.io/2022/03/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/">https://wlinkjt.github.io/2022/03/16/qian-ru-shi-ji-chu-tong-xin-zhi-iic/</a>
+                    <a href="https://wlinkjt.github.io/2025/04/06/hexo-dian-nao-geng-huan-qian-yi-bu-zou/">https://wlinkjt.github.io/2025/04/06/hexo-dian-nao-geng-huan-qian-yi-bu-zou/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -669,11 +567,7 @@ u8 IIC_Read_Byte(unsigned char ack)
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
-                                    <span class="chip bg-color">嵌入式通信</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -849,13 +743,13 @@ u8 IIC_Read_Byte(unsigned char ack)
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/03/20/qian-ru-shi-ji-chu-tong-xin-zhi-spi/">
+                <a href="/2026/04/06/rag-xiang-jie/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="嵌入式基础通信之SPI">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="RAG详解">
                         
-                        <span class="card-title">嵌入式基础通信之SPI</span>
+                        <span class="card-title">RAG详解</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -866,7 +760,7 @@ u8 IIC_Read_Byte(unsigned char ack)
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-20
+                            <i class="far fa-clock fa-fw icon-date"></i>2026-04-06
                         </span>
                         <span class="publish-author">
                             
@@ -875,14 +769,6 @@ u8 IIC_Read_Byte(unsigned char ack)
                             
                         </span>
                     </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
-                        <span class="chip bg-color">嵌入式通信</span>
-                    </a>
-                    
                 </div>
                 
             </div>
@@ -894,13 +780,13 @@ u8 IIC_Read_Byte(unsigned char ack)
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/03/15/qian-ru-shi-ji-chu-tong-xin-zhi-hong-wai-tong-xin/">
+                <a href="/2022/10/05/freertos-ji-chu-er/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="嵌入式基础通信之红外通信-R05d协议">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="FreeRTOS基础（二）">
                         
-                        <span class="card-title">嵌入式基础通信之红外通信-R05d协议</span>
+                        <span class="card-title">FreeRTOS基础（二）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -911,7 +797,7 @@ u8 IIC_Read_Byte(unsigned char ack)
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-05
                             </span>
                         <span class="publish-author">
                             
@@ -924,8 +810,8 @@ u8 IIC_Read_Byte(unsigned char ack)
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
-                        <span class="chip bg-color">嵌入式通信</span>
+                    <a href="/tags/FreeRTOS/">
+                        <span class="chip bg-color">FreeRTOS</span>
                     </a>
                     
                 </div>

@@ -39,6 +39,27 @@
   </entry>
   
   <entry>
+    <title>hexo电脑更换迁移步骤</title>
+    <link href="https://wlinkjt.github.io/2025/04/06/hexo-dian-nao-geng-huan-qian-yi-bu-zou/"/>
+    <id>https://wlinkjt.github.io/2025/04/06/hexo-dian-nao-geng-huan-qian-yi-bu-zou/</id>
+    <published>2025-04-06T08:24:11.000Z</published>
+    <updated>2026-04-06T09:11:37.080Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;最近更换电脑后，原电脑数据需要迁移备份到新电脑上。其中，hexo迁移网上资料较多，但记叙不够清晰。&lt;br&gt;在经过实践之后，为保证下一次能够快速进行，特意对整个过程进行系统性的记录。&lt;br&gt;整体迁移步骤包含：&lt;strong&gt;原文件迁移&lt;/strong&gt;，&lt;strong&gt;软件安</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>FreeRTOS基础（二）</title>
     <link href="https://wlinkjt.github.io/2022/10/05/freertos-ji-chu-er/"/>
     <id>https://wlinkjt.github.io/2022/10/05/freertos-ji-chu-er/</id>
