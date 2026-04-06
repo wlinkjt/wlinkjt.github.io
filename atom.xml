@@ -6,7 +6,7 @@
   <link href="https://wlinkjt.github.io/atom.xml" rel="self"/>
   
   <link href="https://wlinkjt.github.io/"/>
-  <updated>2026-04-06T13:33:04.874Z</updated>
+  <updated>2026-04-06T13:42:52.476Z</updated>
   <id>https://wlinkjt.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>大模型应用之RAG详解</title>
+    <link href="https://wlinkjt.github.io/2025/12/06/da-mo-xing-ying-yong-zhi-rag-xiang-jie/"/>
+    <id>https://wlinkjt.github.io/2025/12/06/da-mo-xing-ying-yong-zhi-rag-xiang-jie/</id>
+    <published>2025-12-06T07:12:26.000Z</published>
+    <updated>2026-04-06T13:42:52.476Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;RAG详解&quot;&gt;&lt;a href=&quot;#RAG详解&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    
+    <category term="AI" scheme="https://wlinkjt.github.io/tags/AI/"/>
+    
+  </entry>
   
   <entry>
     <title>hexo迁移步骤</title>
