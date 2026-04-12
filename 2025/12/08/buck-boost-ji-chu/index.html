@@ -4,9 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="ZYNQ嵌入式开发（一）, 无兴之的博客">
-    <meta name="description" content="本篇主要对如何进行zynq嵌入式开发的流程进行介绍。开发环境为vivado 2018.3
-整体流程zynq嵌入式开发流程如下图1，主要分为6步。对于初学者来说，首先需要掌握硬件环境搭建，也就是前4步。下面以创建读写SD卡并通过串口发送消息为">
+    <meta name="keywords" content="Buck-Boost基础, 无兴之的博客">
+    <meta name="description" content="在DC-DC电源中，Buck-Boost拓扑兼具了Buck电路与Boost电路功能，是电源研发中重要的拓扑结构之一。其中，四开关升降压电路作为Buck-Boost拓扑的代表，被广泛应用于工程实践当中。本文也以该电路为例，深入分析Buck-B">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>ZYNQ嵌入式开发（一） | 无兴之的博客</title>
+    <title>Buck-Boost基础 | 无兴之的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -313,12 +312,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">ZYNQ嵌入式开发（一）</h1>
+                    <h1 class="description center-align post-title">Buck-Boost基础</h1>
                 </div>
             </div>
         </div>
@@ -434,8 +433,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/ZYNQ/">
-                                <span class="chip bg-color">ZYNQ</span>
+                            <a href="/tags/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/">
+                                <span class="chip bg-color">电力电子</span>
                             </a>
                         
                     </div>
@@ -450,7 +449,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-04-01
+                    2025-12-08
                 </div>
                 
 
@@ -459,7 +458,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    738
+                    2.7k
                 </div>
                 
 
@@ -484,70 +483,18 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>本篇主要对如何进行zynq嵌入式开发的流程进行介绍。开发环境为vivado 2018.3</p>
-<h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><p>zynq嵌入式开发流程如下图1，主要分为6步。对于初学者来说，首先需要掌握硬件环境搭建，也就是前4步。<br><img src="https://s1.ax1x.com/2022/07/17/j579Ag.png" alt="图1 zynq嵌入式开发流程"><br>下面以创建读写SD卡并通过串口发送消息为例进行流程讲解。</p>
-<h1 id="硬件环境搭建"><a href="#硬件环境搭建" class="headerlink" title="硬件环境搭建"></a>硬件环境搭建</h1><p>首先打开vivado界面，选择create project，在创建好工程名后一路点击next，选择好自己芯片型号后，最后得到图2所示的界面。<br><img src="https://s1.ax1x.com/2022/07/16/j56SJS.md.png" alt="图2 工程创建完成"><br>在工程界面，选择左边IP INTEGRATOR下的create block design。再点击diagram下的“+”，在弹出的选择框中，输入zynq，如图3所示，双击该选项，得到如图4所示的，最初始的PS。<br><img src="https://s1.ax1x.com/2022/07/16/j5yzi8.md.png" alt="图3 选择PS"><br><img src="https://s1.ax1x.com/2022/07/16/j56pRg.md.png" alt="图4 初始化PS"><br>由于本例程只使用了SD卡的读写以及UART，并没有涉及到其他接口，因此需要对该PS进行设置。<br>DDR3的设置，选择适配自己的DDR型号<br><img src="https://s1.ax1x.com/2022/07/16/j56FLn.md.png" alt="图5 DDR3设置"><br>时钟的设置<br><img src="https://s1.ax1x.com/2022/07/16/j56iss.md.png" alt="图6 时钟设置"><br>IO选择，由于例程只用到SD以及UART，因此只勾选SD和UART的引脚，注意BANK1为1.8V<br><img src="https://s1.ax1x.com/2022/07/16/j56AZq.md.png" alt="图7 IO的选择"><br>串口的设置<br><img src="https://s1.ax1x.com/2022/07/16/j56Ed0.md.png" alt="图8 串口设置"><br>复位去除<br><img src="https://s1.ax1x.com/2022/07/16/j56VoV.md.png" alt="图9 复位去除"><br>设置完成后点击run block automation，创建自己的IP核，最后如10所示.<br><img src="https://s1.ax1x.com/2022/07/16/j56eiT.md.png" alt="图10 设置完成后的IP核"><br>之后右击工程，选择generate output products,如图11所示。<br><img src="https://s1.ax1x.com/2022/07/16/j56mJU.png" alt="图11 生成输出文件"><br>之后右击工程，生成HDL wrapper后，选择file-&gt;export hardware，该处不点击生成比特流文件，因为并没有用到PL的部分。<br>在完成以上操作后，硬件环境搭建完成，进入SDK进行编写。</p>
-<h1 id="SDK库文件添加"><a href="#SDK库文件添加" class="headerlink" title="SDK库文件添加"></a>SDK库文件添加</h1><p>此处操作主要添加板载支持文件——FAT32文件系统.<br>在打开的SDK页面，选择file—&gt;new—&gt;application project.填好工程名后，选择空工程。<br>之后右击选择board support package settings,如图12.<br><img src="https://s1.ax1x.com/2022/07/16/j56nWF.md.png" alt="图12 板载支持包设置"><br>勾选xilffs文件即完成FAT32系统支持包的添加。</p>
-<h1 id="程序编写"><a href="#程序编写" class="headerlink" title="程序编写"></a>程序编写</h1><p>本例程完成SD卡的读写以及通过串口打印是否读写正确。程序代码如下：</p>
-<pre class="line-numbers language-none"><code class="language-none">#include "xil_printf.h"
-#include "ff.h"
-#include "xparameters.h"
+                <p>在DC-DC电源中，Buck-Boost拓扑兼具了Buck电路与Boost电路功能，是电源研发中重要的拓扑结构之一。<br>其中，四开关升降压电路作为Buck-Boost拓扑的代表，被广泛应用于工程实践当中。本文也以该电路为例，深入分析Buck-Boost的电路原理。</p>
+<h1 id="1-非隔离型DC-DC拓扑简介"><a href="#1-非隔离型DC-DC拓扑简介" class="headerlink" title="1 非隔离型DC-DC拓扑简介"></a>1 非隔离型DC-DC拓扑简介</h1><p>非隔离型DC-DC拓扑是指输入端与输出端之间‌没有通过变压器进行电气隔离‌的直流变换电路，具有‌成本低、体积小、效率高‌的特点。<br>常见的非隔离型DC-DC拓扑主要有Buck、Boost、Buck-Boost、Sepic、Cuk等<br>其中，Buck电路常用于降压场景，Boost电路用于升压场景，是最基础的两类拓扑结构。<br>Buck-Boost可看作将Buck电路与Boost电路串联而成，兼有升高电压或者降低电压的功能，但需要注意的是两开关的Buck-Boost电路的输出电压与输入电压反向。<br>Sepic功能与Buck-Boost一致（输出电压与输入电压同向），也是用于升降压场景，但Sepic需要两个功率电感以及多加一个隔直电容，会占用更大的板面积，因此在实际工程中运用没有Buck-Boost广泛。<br>Cuk功能与Buck-Boost一样，相比于Buck-Boost，其输入输出端均含有电感，显著地减少了输入和输出电流扰动，但由于额外增加了一个电感以及电容，成本显著提高，因此在实际工程中应用较少。</p>
+<h1 id="2-Buck-Boost升降压原理"><a href="#2-Buck-Boost升降压原理" class="headerlink" title="2 Buck-Boost升降压原理"></a>2 Buck-Boost升降压原理</h1><p>Buck-Boost可看作Buck电路与Boost电路串联而成，因此分析Buck-Boost电路的升降压原理可从Buck、Boost开始分析。</p>
+<h2 id="2-1-降压原理"><a href="#2-1-降压原理" class="headerlink" title="2.1 降压原理"></a>2.1 降压原理</h2><p>Buck电路拓扑如图所示<br><img src="https://s41.ax1x.com/2026/04/10/pewP9Ig.md.png" alt="图1 Buck电路拓扑图"><br>当Q1导通时，电感充电，电感两端的电压为$V_{in}-V_{out}$,电流在电感的流向从左到右；<br>当Q1截止时，电感放电，电感两端的电压近似$V_{out}$,电流由电感出发，流向电阻，再经二极管流回电感。<br>对电感，由伏秒平衡定律可知：<br>$$<br>(V_{in}-V_{out}) \times t_{on} = V_{out} \times t_{off}<br>$$<br>$$<br>t_{on} +  t_{off} =T<br>$$<br>其中$t_{on}$为mos管Q1导通的时间，其中$t_{off}$为mos管Q1截止的时间，T为整个周期<br>由上式可知：<br>$$<br>V_{out} =V_{in} \times \frac{t_{on} }{T}<br>$$<br>即输出电压的大小由mos管Q1导通时间的占空比决定，Q1占空比越大，输出电压越高。<br>Buck-Boost电路的等效模型如下图所示：<br><img src="https://s41.ax1x.com/2026/04/10/pewPiGj.md.png" alt="图2 Buck Boost降压状态下的等效模型"><br>由上面对Buck电路的分析，可知Q1与Q2占空比互补，且Q1占空比越大，输出电压越高。</p>
+<h2 id="2-2-升压原理"><a href="#2-2-升压原理" class="headerlink" title="2.2 升压原理"></a>2.2 升压原理</h2><p>Boost电路拓扑如图所示<br><img src="https://s41.ax1x.com/2026/04/10/pewPkzn.md.png" alt="图3 Boost电路拓扑图"><br>当Q1导通时，电感充电，电感两端的电压为$V_{in}$，电流在电感的流向从左到右；<br>当Q1截止时，电感放电，电感两端的电压为$V_{out}-V_{in}$，电流由电感出发，流经二极管。<br>对电感，由伏秒平衡定律可知：<br>$$<br>V_{in} \times t_{on} = (V_{out}-V_{in}) \times t_{off}<br>$$<br>$$<br>t_{on} +  t_{off} =T<br>$$<br>其中$t_{on}$为mos管Q1导通的时间，其中$t_{off}$为mos管Q1截止的时间，T为整个周期<br>由上式可知：<br>$$<br>V_{out} =V_{in} \times \frac{T }{T-t_{on} }<br>$$<br>输出电压的大小由Q1的导通时间决定，Q1占空比越大，即导通时间越长，输出电压越高。<br>Buck-Boost电路的等效模型如下图所示：<br><img src="https://s41.ax1x.com/2026/04/10/pewPPiQ.md.png" alt="图4 Buck Boost升压状态下的等效模型"><br>由上面对Boost电路的分析，可知Q3与Q4占空比互补，且Q3占空比越大，输出电压越高。</p>
+<h2 id="2-3-升降压原理"><a href="#2-3-升降压原理" class="headerlink" title="2.3 升降压原理"></a>2.3 升降压原理</h2><p>Buck-Boost电路的拓扑如下：<br><img src="https://s41.ax1x.com/2026/04/10/pewPFRs.md.png" alt="图5 Buck Boost电路拓扑图"><br>当输入电压与输出电压相差不大时，通过控制四个mos管实现电压变换功能。<br>设Q1导通时间占空比为$D_{1}$,Q3导通时间占空比为$D_{2}$<br>首先对于Buck模式，各mos管需要循环经历三个状态，分别为：<br>（1）Q1导通，Q2反向恢复，Q3截止，Q4导通<br>（2）Q1导通，Q2截止，Q3截止，Q4导通<br>（3）Q1截止，Q2导通，Q3截止，Q4导通<br>这里实际与上面分析Buck完全一致，输入输出关系依然成立<br>$$<br>V_{out} =V_{in} \times {D_{1} }<br>$$<br>其次对于Boost模式，各mos管也需要循环经历三个状态，分别为：<br>（1）Q1导通，Q2截止，Q3反向恢复，Q4导通<br>（2）Q1导通，Q2截止，Q3截止，Q4导通<br>（3）Q1导通，Q2截止，Q3导通，Q4截止<br>这里实际与上面分析Boost完全一致，输入输出关系依然成立<br>$$<br>V_{out} =V_{in} \times \frac{1}{1-D_{2} }<br>$$<br>最后对于Buck-Boost模式,由于在频繁的开关管过程中需要限制mos管的最小占空比，对于输入和输出电压相近的情况，传统的Buck、Boost模式已不能满足电压转换要求，需要增加一个等待空耗时间的状态，因此各状态分别为：<br>（1）Q1导通，Q2截止，Q3导通，Q4截止<br>（2）Q1截止，Q2导通，Q3导通，Q4截止<br>（3）Q1截止，Q2导通，Q3截止，Q4导通<br>（4）Q1截止，Q2导通，Q3导通，Q4截止<br>这里，对电感由伏秒平衡原理可知：<br>$$<br>V_{in} \times D_{1} T=V_{out} \times (1-D_{2} )T<br>$$<br>化简得：<br>$$<br>V_{out}=\frac{D_{1}}{1-D_{2}} V_{in}<br>$$<br>回到前两种模式<br>对于Buck模式来说，可以认为D2=0，带入Buck-Boost模式公式，正好符合Buck的输入输出关系；<br>对于Boost模式来说，可以认为D1=1，带入Buck-Boost模式公式，也是符合Boost输入输出关系。<br>综上，Buck-Boost电路的输入输出关系可用$V_{out}=\frac{D_{1}}{1-D_{2}} V_{in}$完全表示。</p>
+<h1 id="3-Buck-Boost控制策略"><a href="#3-Buck-Boost控制策略" class="headerlink" title="3 Buck-Boost控制策略"></a>3 Buck-Boost控制策略</h1><p>通过上述对Buck-Boost升降压原理的分析，我们可以将Buck-Boost电路分为三个状态，分别为Buck模式、Boost模式以及Buck-Boost模式。<br>对上面三种状态的深入分析，我们得到了可以完全表示他们输入输出关系的公式。<br>下面我们对其控制策略进行讨论分析。这里选择比较重要的两块，分别是环路控制及补偿策略以及模式状态平滑切换策略。</p>
+<h2 id="3-1-环路控制及补偿策略分析"><a href="#3-1-环路控制及补偿策略分析" class="headerlink" title="3.1 环路控制及补偿策略分析"></a>3.1 环路控制及补偿策略分析</h2><p>在数字电源的设计中，环路控制一直是核心部分。良好的环路设计不仅能够保证电源输出的稳定性，而且对其动态性能的提高也具有重要意义。<br>环路设计的前提首先是搞清楚所选电路拓扑的传递函数。对于Buck-Boost电路，有大量资料对其传递函数进行了分析,详情可参考《fundamental of power electronic》，这里不做推导，直接给出结论：<br>$$<br>G(s)=-\frac{D}{D^{‘} } \frac{R}{R+\frac{sL}{(D^{‘} )^{2} } +\frac{s^{2}RLC }{(D^{‘} )^{2}} }<br>$$<br>对上述传递函数$G(s)$进行频域分析，观察其穿越频率、相位裕度以及幅值裕度三个指标是否符合要求。下面给出三个指标的定义以及稳定性判断依据：<br>（1）穿越频率<br>穿越频率是指增益为0dB时所对应的频率值，穿越频率越高，系统闭环带宽越大，‌响应越快；<br>但穿越频率过高，可能导致系统在该频率处的‌相位滞后过大‌，从而‌降低相位裕度‌，引发不稳定‌。一般来说，穿越频率一般需要低于开关频率的$\frac{1}{10} $；<br>（2）相位裕度<br>相位裕度是指在‌穿越频率处，系统开环相位与 ‌-180°‌ 的差值，大于0°则系统稳定，但小于45°可能出现明显的振铃或超调，所以工程上一般需要大于45°；<br>（3）幅值裕度<br>幅值裕度是指在‌相位穿越频率‌（即相位 = -180° 的频率）处系统开环增益（以 dB 表示）距离 0 dB 的余量，为保证鲁棒性，工程上至少需要大于7db。</p>
+<p>当上述指标无法符合要求时，可通过零极点补偿使补偿后的开环传递函数达到上述要求。补偿函数即环路控制的数学模型，一般选择PID。<br>PID控制的传递函数如下：<br>$$<br>G_{PID} (s)=k_{p}+\frac{k_{i} }{s}  +k_{d} s<br>$$<br>对于开关电源，绝大多数拓扑只需进行PI补偿即可以满足要求，通过对补偿后的开环传递函数$H(s)=G(s)G_{PID} (s)$分析上述三个指标，如果能够满足要求，即系统稳定。<br>当然，对于具体的环路架构设计，这里不过多展开，一般理论分析、设计的流程基本如上。不同的工程实践项目可能稍有不同，但指标的评判，补偿的原理等一致。</p>
+<h2 id="3-2-状态平滑切换策略"><a href="#3-2-状态平滑切换策略" class="headerlink" title="3.2 状态平滑切换策略"></a>3.2 状态平滑切换策略</h2><p>Buck-Boost在工作时具有三种状态，每种状态对应的mos管的开关动作也不一样，<br>当输入电压接近输出电压时，若切换阈值设置过窄，微小的采样噪声或负载波动会反复触发模式切换，造成系统在两种模式间高频振荡，显著增加开关损耗并降低可靠性‌<br>同时，模式切换需重新配置PWM信号、驱动时序及死区时间。若切换过快，可能出现上下桥臂直通（短路）或能量传输“真空期”，导致输出电压崩溃‌，因此需要设计合理的状态平滑切换策略。<br>平滑切换策略可以采用滞回区间+模式重叠设计策略。电路工作模式首先设计为Buck、Boost以及Buck-Boost三种模式，每种模式划定一个范围，然后根据输入输出电压的比值，判断此时电路应该工作在何种模式，对mos管进行赋值驱动。在各个模式临界处设立重叠区域，即输出电压在临界处上升或者下降时依然维持原模式，直到超出重叠区时进行模式切换。这样能减少波动导致反复触发模式切换，减少系统在模式切换时的震荡。</p>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h1><p>上述以四开关升降压电路为例介绍Buck-Boost电路的底层原理，分析了三种状态的输入输出关系，同时简要介绍了Buck-Boost两块控制策略的大体思路，对设计以Buck-Boost电路为核心的产品提供一定的参考。具体的控制策略、方法、调试方式因项目不同而有差别，笔者欢迎大家联系进行讨论。</p>
 
-#define file_name "example.txt"
-
-char str_wr[50]="1315";
-//将wr_data[]中数据写入wr_len个
-void sd_write_data(char wr_data[],u32 wr_len)
-{
-	FIL file;
-	UINT bw;
-
-	f_open(&amp;file,file_name,FA_CREATE_ALWAYS|FA_WRITE|FA_READ);//打开（创建）文件
-	f_lseek(&amp;file,0);//移动读写指针
-	f_write(&amp;file,wr_data,wr_len,&amp;bw);//写数据
-	f_close(&amp;file);//关闭文件
-
-}
-//读出rd_len个数据到rd_data中
-void sd_read_data(char rd_data[],u32 rd_len)
-{
-	FIL file;
-	UINT br;
-
-	f_open(&amp;file,file_name,FA_READ);//打开文件
-	f_lseek(&amp;file,0);//移动读写指针
-	f_read(&amp;file,rd_data,rd_len,&amp;br);//写数据
-	f_close(&amp;file);//关闭文件
-
-}
-//将SD卡格式化
-void sd_mount()
-{
-    FRESULT state;
-	FATFS fs;
-    BYTE work[FF_MAX_SS];
-    state=f_mount(&amp;fs,"",1);
-    if(state!=FR_OK)
-    {
-    	xil_printf("not fat32");
-    	//格式化SD卡
-    	f_mkfs("",FM_FAT32,0,work,sizeof work);
-    	state=f_mount(&amp;fs,"",1);
-    }
-}
-int main()
-{
-	FATFS fs;
-	u32 len=0;
-	char str_rd[50]="";
-	f_mount(&amp;fs,"",1);//进行挂载
-	len=strlen(str_wr);
-	sd_write_data(str_wr,len);//写入数据
-    sd_read_data(str_rd,len);//读取数据
-    if(strcmp(str_wr,str_rd)==0) xil_printf("succeed!!\r\n");
-    else xil_printf("fail!!!\r\n");
-    return 0;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -573,7 +520,7 @@ int main()
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wlinkjt.github.io/2022/04/01/zynq-qian-ru-shi-kai-fa-yi/">https://wlinkjt.github.io/2022/04/01/zynq-qian-ru-shi-kai-fa-yi/</a>
+                    <a href="https://wlinkjt.github.io/2025/12/08/buck-boost-ji-chu/">https://wlinkjt.github.io/2025/12/08/buck-boost-ji-chu/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -611,8 +558,8 @@ int main()
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/ZYNQ/">
-                                    <span class="chip bg-color">ZYNQ</span>
+                                <a href="/tags/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/">
+                                    <span class="chip bg-color">电力电子</span>
                                 </a>
                             
                         </div>
@@ -790,13 +737,13 @@ int main()
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/10/05/freertos-ji-chu-er/">
+                <a href="/2026/01/08/qian-ru-shi-ji-chu-tong-xin-zhi-lin/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="FreeRTOS基础（二）">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="嵌入式基础通信之LIN">
                         
-                        <span class="card-title">FreeRTOS基础（二）</span>
+                        <span class="card-title">嵌入式基础通信之LIN</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -807,53 +754,8 @@ int main()
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-10-05
+                            <i class="far fa-clock fa-fw icon-date"></i>2026-01-08
                         </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            无兴之
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/FreeRTOS/">
-                        <span class="chip bg-color">FreeRTOS</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2022/03/20/qian-ru-shi-ji-chu-tong-xin-zhi-spi/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="嵌入式基础通信之SPI">
-                        
-                        <span class="card-title">嵌入式基础通信之SPI</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-20
-                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -867,6 +769,51 @@ int main()
                     
                     <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%9A%E4%BF%A1/">
                         <span class="chip bg-color">嵌入式通信</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/12/06/da-mo-xing-ying-yong-zhi-rag-xiang-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="大模型应用之RAG详解">
+                        
+                        <span class="card-title">大模型应用之RAG详解</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-12-06
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            无兴之
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/AI/">
+                        <span class="chip bg-color">AI</span>
                     </a>
                     
                 </div>
